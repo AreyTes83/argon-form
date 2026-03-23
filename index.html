@@ -141,6 +141,7 @@
         }
 
         input[type="text"], 
+        input[type="url"],
         input[type="number"], 
         select, 
         textarea {
@@ -287,75 +288,6 @@
             margin-top: 15px;
         }
 
-        /* File Upload Box */
-        .file-box {
-            border: 2px dashed var(--border);
-            padding: 30px 20px;
-            text-align: center;
-            border-radius: 16px;
-            background: rgba(255, 255, 255, 0.4);
-            cursor: pointer;
-            transition: var(--transition);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .file-box:hover {
-            border-color: var(--primary);
-            background: rgba(79, 70, 229, 0.05);
-            transform: translateY(-2px);
-        }
-
-        .file-icon {
-            width: 48px;
-            height: 48px;
-            color: var(--primary);
-            background: rgba(79, 70, 229, 0.1);
-            padding: 12px;
-            border-radius: 50%;
-            margin-bottom: 5px;
-        }
-
-        .file-box strong {
-            color: var(--primary);
-            font-size: 16px;
-        }
-
-        .file-box p {
-            font-size: 13px;
-            color: var(--text-muted);
-        }
-
-        #f_list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 15px;
-            justify-content: center;
-        }
-
-        .file-tag {
-            background: white;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--primary);
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            border: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            animation: fadeIn 0.3s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.9); }
-            to { opacity: 1; transform: scale(1); }
-        }
-
         /* Submit Button */
         .btn {
             width: 100%;
@@ -406,7 +338,8 @@
         <p>Анкета комерційної нерухомості</p>
     </div>
 
-    <form action="https://formspree.io/f/mreyworp" method="POST" enctype="multipart/form-data">
+    <!-- ВИДАЛЕНО enctype="multipart/form-data" -->
+    <form action="https://formspree.io/f/mreyworp" method="POST">
         
         <div class="section-title">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
@@ -502,13 +435,15 @@
             Фото та документи
         </div>
         
-        <div class="file-box" onclick="document.getElementById('f_input').click()">
-            <svg class="file-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
-            <strong>Натисніть для завантаження</strong>
-            <p>Фотографії приміщення, фасад, план, техпаспорт</p>
-            <input type="file" id="f_input" name="files" multiple style="display:none" onchange="updateFiles()">
+        <!-- Замість завантаження файлу - поле для вставки URL -->
+        <div class="field">
+            <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
+            <input type="url" name="files_link" placeholder=" ">
+            <label class="floating-label">Посилання на фото (Google Диск тощо)</label>
+            <p style="font-size: 11px; color: var(--text-muted); padding-left: 12px; margin-top: 6px;">
+                Завантажте фото у зручний хмарний сервіс та вставте сюди посилання.
+            </p>
         </div>
-        <div id="f_list"></div>
 
         <button type="submit" class="btn">ВІДПРАВИТИ ПРОПОЗИЦІЮ</button>
     </form>
@@ -524,20 +459,6 @@
             el.classList.remove('show');
             el.querySelector('input').value = '';
         }
-    }
-
-    function updateFiles() {
-        const input = document.getElementById('f_input');
-        const list = document.getElementById('f_list');
-        list.innerHTML = '';
-        
-        Array.from(input.files).forEach(file => {
-            const tag = document.createElement('div');
-            tag.className = 'file-tag';
-            tag.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path></svg> 
-                             ${file.name}`;
-            list.appendChild(tag);
-        });
     }
 </script>
 
