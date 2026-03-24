@@ -1,3 +1,79 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Argon — Оренда</title>
+    <script src="https://forminit.com/sdk/v1/forminit.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary: #4F46E5; --secondary: #EC4899; }
+        body { font-family: 'Outfit', sans-serif; background: linear-gradient(135deg, #f0f4fd 0%, #c3cfe2 100%); display: flex; justify-content: center; padding: 20px; min-height: 100vh; }
+        .card { background: white; max-width: 550px; width: 100%; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); overflow: hidden; }
+        .header { background: linear-gradient(135deg, var(--primary), var(--secondary)); padding: 40px 20px; text-align: center; color: white; }
+        .logo { font-size: 38px; font-weight: 800; letter-spacing: 3px; }
+        form { padding: 30px; }
+        label { display: block; font-weight: 600; font-size: 14px; margin-bottom: 8px; color: #1e293b; }
+        input, select, textarea { width: 100%; padding: 12px; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 15px; margin-bottom: 20px; font-family: inherit; }
+        .row { display: flex; gap: 15px; }
+        .row > div { flex: 1; }
+        .file-box { border: 2px dashed var(--primary); padding: 20px; text-align: center; border-radius: 12px; background: #f8fbff; cursor: pointer; margin-bottom: 10px; }
+        .btn { width: 100%; background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; border: none; padding: 18px; border-radius: 12px; font-weight: 700; font-size: 16px; cursor: pointer; transition: 0.3s; }
+        .btn:disabled { opacity: 0.7; cursor: not-allowed; }
+        #result { text-align: center; font-weight: 600; margin-top: 15px; font-size: 14px; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <div class="header">
+        <div class="logo">ARGON</div>
+        <p style="opacity: 0.9; font-size: 12px; letter-spacing: 1px; margin-top: 5px;">ВІДДІЛ РОЗВИТКУ МЕРЕЖІ</p>
+    </div>
+
+    <form id="argon-form">
+        <label>Адреса об'єкта *</label>
+        <input type="text" id="inp-address" name="address" required placeholder="Місто, вулиця, номер">
+
+        <div class="row">
+            <div>
+                <label>Площа (м²) *</label>
+                <input type="number" id="inp-area" name="area" required placeholder="0">
+            </div>
+            <div>
+                <label>Ціна (грн/міс) *</label>
+                <input type="number" id="inp-price" name="price" required placeholder="0">
+            </div>
+        </div>
+
+        <div class="row">
+            <div>
+                <label>Електроенергія (кВт)</label>
+                <input type="text" id="inp-power" name="power" placeholder="50">
+            </div>
+            <div>
+                <label>Поверх</label>
+                <select id="inp-floor" name="floor">
+                    <option value="1 поверх">1 поверх</option>
+                    <option value="Цоколь">Цоколь</option>
+                </select>
+            </div>
+        </div>
+
+        <label>Стан та ремонт</label>
+        <textarea id="inp-message" name="message" rows="3" placeholder="Опишіть об'єкт..."></textarea>
+
+        <label>Фото та документи</label>
+        <div class="file-box" onclick="document.getElementById('file_input').click()">
+            <span id="file_text" style="color: var(--primary); font-weight: 700;">📎 Прикріпити файли</span>
+            <input type="file" id="file_input" name="attachments" multiple style="display:none;" onchange="updateFiles()">
+        </div>
+
+        <button type="submit" id="submit-btn" class="btn">ВІДПРАВИТИ</button>
+        <div id="result"></div>
+    </form>
+</div>
+
 <script>
     const forminit = new Forminit();
     const FORM_ID = "s5sa0f3ulyq";
@@ -15,47 +91,49 @@
         
         btn.disabled = true;
         btn.innerText = "ВІДПРАВКА...";
-        result.textContent = "";
-
-        // РУЧНИЙ ЗБІР ДАНИХ (Бронебійний метод)
-        const form = e.target;
-        const manualData = new FormData();
-        
-        // Додаємо кожне поле окремо
-        manualData.append("address", form.querySelector('[name="address"]').value);
-        manualData.append("area", form.querySelector('[name="area"]').value);
-        manualData.append("price", form.querySelector('[name="price"]').value);
-        manualData.append("power", form.querySelector('[name="power"]').value);
-        manualData.append("floor", form.querySelector('[name="floor"]').value);
-        manualData.append("message", form.querySelector('[name="message"]').value);
-        
-        // Додаємо файли
-        const fileInput = document.getElementById('file_input');
-        if (fileInput.files.length > 0) {
-            for (let i = 0; i < fileInput.files.length; i++) {
-                manualData.append("attachments", fileInput.files[i]);
-            }
-        }
+        result.style.color = "black";
+        result.textContent = "Обробка даних...";
 
         try {
-            // Відправка
-            const { data, error } = await forminit.submit(FORM_ID, manualData);
+            // Створюємо порожній пакет даних
+            const finalData = new FormData();
+            
+            // ПРЯМИЙ ЗБІР З КОЖНОГО ID (щоб уникнути порожніх полів)
+            finalData.append("address", document.getElementById("inp-address").value);
+            finalData.append("area", document.getElementById("inp-area").value);
+            finalData.append("price", document.getElementById("inp-price").value);
+            finalData.append("power", document.getElementById("inp-power").value);
+            finalData.append("floor", document.getElementById("inp-floor").value);
+            finalData.append("message", document.getElementById("inp-message").value);
+            
+            // Додаємо файли
+            const files = document.getElementById("file_input").files;
+            for (let i = 0; i < files.length; i++) {
+                finalData.append("attachments", files[i]);
+            }
+
+            // Відправка через SDK
+            const { data, error } = await forminit.submit(FORM_ID, finalData);
 
             if (error) {
-                result.className = "error";
-                result.textContent = "Помилка: " + error.message;
+                result.style.color = "red";
+                result.textContent = "Помилка сервера: " + error.message;
             } else {
-                result.className = "success";
-                result.textContent = "Дякуємо! Пропозицію успішно надіслано.";
-                form.reset();
+                result.style.color = "green";
+                result.textContent = "✅ Успішно! Ми отримали вашу пропозицію.";
+                document.getElementById("argon-form").reset();
                 document.getElementById('file_text').innerText = "📎 Прикріпити файли";
             }
         } catch (err) {
-            result.className = "error";
-            result.textContent = "Сталася помилка з'єднання.";
+            result.style.color = "red";
+            result.textContent = "Критична помилка відправки.";
+            console.error(err);
         } finally {
             btn.disabled = false;
             btn.innerText = "ВІДПРАВИТИ";
         }
     });
 </script>
+
+</body>
+</html>
