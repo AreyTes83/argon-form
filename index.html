@@ -4,183 +4,123 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Argon — Оренда нерухомості</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+    <script src="https://forminit.com/sdk/v1/forminit.js"></script>
     <style>
         :root {
             --primary: #4F46E5;
             --secondary: #EC4899;
-            --bg-gradient: linear-gradient(135deg, #f0f4fd 0%, #c3cfe2 100%);
-            --surface: rgba(255, 255, 255, 0.95);
-            --text-main: #1e293b;
-            --border: #cbd5e1;
-            --radius: 20px;
+            --text: #1e293b;
         }
-
         * { box-sizing: border-box; margin: 0; padding: 0; }
-
-        body {
-            font-family: 'Outfit', sans-serif;
-            background: var(--bg-gradient);
-            color: var(--text-main);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 40px 20px;
-        }
-
-        .container {
-            background: var(--surface);
-            max-width: 600px;
-            width: 100%;
-            border-radius: var(--radius);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
-            overflow: hidden;
-        }
-
-        .header {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            padding: 40px;
-            text-align: center;
-            color: white;
-        }
-
-        .logo { font-size: 38px; font-weight: 800; letter-spacing: 3px; }
-
+        body { font-family: 'Outfit', sans-serif; background: #eef2f7; display: flex; justify-content: center; padding: 20px; }
+        .card { background: white; max-width: 550px; width: 100%; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); overflow: hidden; }
+        .header { background: linear-gradient(135deg, var(--primary), var(--secondary)); padding: 40px 20px; text-align: center; color: white; }
+        .logo { font-size: 35px; font-weight: 800; letter-spacing: 3px; }
         form { padding: 30px; }
-
-        .section-title {
-            font-size: 13px; font-weight: 700; color: var(--primary);
-            text-transform: uppercase; margin: 25px 0 15px;
-            border-bottom: 1px solid #eee; padding-bottom: 5px;
-        }
-
-        .field { margin-bottom: 15px; }
-
-        label { display: block; font-weight: 600; font-size: 14px; margin-bottom: 6px; }
-
-        input[type="text"], input[type="number"], select, textarea {
-            width: 100%; padding: 12px; border: 2px solid var(--border);
-            border-radius: 10px; font-size: 15px; background: white;
-        }
-
+        label { display: block; font-weight: 600; font-size: 14px; margin-bottom: 8px; color: var(--text); }
+        input, select, textarea { width: 100%; padding: 12px; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 15px; margin-bottom: 20px; font-family: inherit; }
+        input:focus { border-color: var(--primary); outline: none; }
         .row { display: flex; gap: 15px; }
         .row > div { flex: 1; }
-
-        .btn {
-            width: 100%; background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white; border: none; padding: 18px; border-radius: 12px;
-            font-size: 16px; font-weight: 700; cursor: pointer; margin-top: 20px;
-            box-shadow: 0 10px 20px rgba(79, 70, 229, 0.2);
-        }
-
-        /* Selector styling */
-        .selector { display: flex; background: #e2e8f0; padding: 4px; border-radius: 10px; position: relative; }
-        .selector input { display: none; }
-        .selector label { flex: 1; text-align: center; padding: 8px; cursor: pointer; font-weight: 600; z-index: 2; font-size: 13px; transition: 0.3s; }
-        .slider {
-            position: absolute; top: 4px; bottom: 4px; left: 4px;
-            width: calc(33.33% - 4px); background: white; border-radius: 7px;
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); z-index: 1;
-        }
-        #w1:checked ~ .slider, #d1:checked ~ .slider { transform: translateX(0); }
-        #w2:checked ~ .slider, #d2:checked ~ .slider { transform: translateX(100%); }
-        #w3:checked ~ .slider, #d3:checked ~ .slider { transform: translateX(200%); }
-        .hidden-input { display: none; margin-top: 8px; }
-
-        .file-box {
-            border: 2px dashed var(--primary); padding: 20px; text-align: center;
-            border-radius: 12px; background: rgba(79, 70, 229, 0.03); cursor: pointer;
-        }
+        .file-box { border: 2px dashed var(--primary); padding: 20px; text-align: center; border-radius: 12px; background: #f8fbff; cursor: pointer; margin-bottom: 10px; }
+        .btn { width: 100%; background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; border: none; padding: 18px; border-radius: 12px; font-weight: 700; font-size: 16px; cursor: pointer; transition: 0.3s; }
+        #result { text-align: center; font-weight: 600; margin-top: 15px; font-size: 14px; min-height: 20px; }
+        .success { color: #10b981; }
+        .error { color: #ef4444; }
     </style>
 </head>
 <body>
 
-<div class="container">
+<div class="card">
     <div class="header">
-        <h1 class="logo">ARGON</h1>
-        <p>Департамент розвитку мережі</p>
+        <div class="logo">ARGON</div>
+        <p style="opacity: 0.9; text-transform: uppercase; font-size: 11px; letter-spacing: 1px; margin-top: 5px;">Відділ розвитку мережі</p>
     </div>
 
-    <form action="https://forminit.com/f/s5sa0f3ulyq" method="POST" enctype="multipart/form-data">
-        
-        <div class="section-title">📍 Локація та ціна</div>
-        
-        <div class="field">
-            <label>Адреса об'єкта *</label>
-            <input type="text" name="address" placeholder="Вулиця, номер, місто" required>
-        </div>
+    <form id="argon-form">
+        <label>Адреса об'єкта *</label>
+        <input type="text" name="address" placeholder="Місто, вулиця, номер" required>
 
         <div class="row">
-            <div class="field">
+            <div>
                 <label>Площа (м²) *</label>
-                <input type="number" name="area" placeholder="0" required>
+                <input type="number" name="area" required>
             </div>
-            <div class="field">
-                <label>Оренда (грн/міс) *</label>
-                <input type="number" name="price" placeholder="0" required>
+            <div>
+                <label>Ціна (грн/міс) *</label>
+                <input type="number" name="price" required>
             </div>
-        </div>
-
-        <div class="section-title">⚡ Технічні характеристики</div>
-
-        <div class="field">
-            <label>Водопостачання *</label>
-            <div class="selector">
-                <input type="radio" name="water" id="w1" value="Так" onclick="toggle('w_ext', false)" required checked>
-                <label for="w1">Так</label>
-                <input type="radio" name="water" id="w2" value="Ні" onclick="toggle('w_ext', false)">
-                <label for="w2">Ні</label>
-                <input type="radio" name="water" id="w3" value="Свій варіант" onclick="toggle('w_ext', true)">
-                <label for="w3">Варіант</label>
-                <div class="slider"></div>
-            </div>
-            <input type="text" id="w_ext" name="water_details" class="hidden-input" placeholder="Деталі водопостачання...">
         </div>
 
         <div class="row">
-            <div class="field">
-                <label>Потужність (кВт) *</label>
-                <input type="text" name="electricity_power" placeholder="Наприклад: 50" required>
+            <div>
+                <label>Електроенергія (кВт)</label>
+                <input type="text" name="power" placeholder="50">
             </div>
-            <div class="field">
-                <label>Поверх *</label>
-                <select name="floor_level">
-                    <option value="1 поверх">1 поверх</option>
-                    <option value="Цоколь">Цоколь</option>
-                    <option value="Інше">Інше</option>
+            <div>
+                <label>Поверх</label>
+                <select name="floor">
+                    <option value="1">1 поверх</option>
+                    <option value="0">Цоколь</option>
                 </select>
             </div>
         </div>
 
-        <div class="field">
-            <label>Парковка (місць)</label>
-            <input type="number" name="parking_spots" placeholder="0">
+        <label>Стан та ремонт</label>
+        <textarea name="message" rows="3" placeholder="Опишіть об'єкт..."></textarea>
+
+        <label>Фото та документи</label>
+        <div class="file-box" onclick="document.getElementById('file_input').click()">
+            <span id="file_text" style="color: var(--primary); font-weight: 600;">📎 Прикріпити файли</span>
+            <input type="file" name="attachments" id="file_input" multiple style="display:none;" onchange="updateFiles()">
         </div>
 
-        <div class="field">
-            <label>Ремонт та стан</label>
-            <textarea name="repair_description" rows="2" placeholder="Опишіть стан..."></textarea>
-        </div>
-
-        <div class="section-title">📸 Фото та техпаспорт</div>
-        
-        <div class="file-box" onclick="document.getElementById('f').click()">
-            <span id="f_txt" style="font-size: 14px; color: var(--primary); font-weight: 700;">📎 Додати файли</span>
-            <input type="file" id="f" name="attachments" multiple style="display:none" onchange="up()">
-            <p style="font-size: 11px; color: var(--text-muted); margin-top: 5px;">Натисніть сюди для вибору фото</p>
-        </div>
-
-        <button type="submit" class="btn">ВІДПРАВИТИ ПРОПОЗИЦІЮ</button>
+        <button type="submit" id="submit-btn" class="btn">ВІДПРАВИТИ</button>
+        <div id="result"></div>
     </form>
 </div>
 
 <script>
-    function toggle(id, show) { document.getElementById(id).style.display = show ? 'block' : 'none'; }
-    function up() {
-        const input = document.getElementById('f');
-        document.getElementById('f_txt').innerText = input.files.length > 0 ? "✅ Вибрано: " + input.files.length : "📎 Додати файли";
+    const forminit = new Forminit();
+    const FORM_ID = "s5sa0f3ulyq";
+
+    // Візуалізація вибору файлів
+    function updateFiles() {
+        const input = document.getElementById('file_input');
+        document.getElementById('file_text').innerText = input.files.length > 0 ? "✅ Вибрано: " + input.files.length : "📎 Прикріпити файли";
     }
+
+    // Обробка відправки через SDK
+    document.getElementById("argon-form").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        
+        const btn = document.getElementById("submit-btn");
+        const result = document.getElementById("result");
+        
+        btn.disabled = true;
+        btn.innerText = "ВІДПРАВКА...";
+        result.textContent = "";
+
+        const formData = new FormData(e.target);
+        
+        // Використовуємо SDK для відправки
+        const { data, error } = await forminit.submit(FORM_ID, formData);
+
+        btn.disabled = false;
+        btn.innerText = "ВІДПРАВИТИ";
+
+        if (error) {
+            result.className = "error";
+            result.textContent = "Помилка: " + error.message;
+            return;
+        }
+
+        result.className = "success";
+        result.textContent = "Дякуємо! Пропозицію успішно надіслано.";
+        e.target.reset();
+        document.getElementById('file_text').innerText = "📎 Прикріпити файли";
+    });
 </script>
 
 </body>
