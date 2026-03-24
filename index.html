@@ -3,18 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Argon — Оренда нерухомості</title>
+    <title>Argon — Пропозиція нерухомості</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #4F46E5;
             --secondary: #EC4899;
             --bg-gradient: linear-gradient(135deg, #f0f4fd 0%, #c3cfe2 100%);
-            --surface: rgba(255, 255, 255, 0.95);
+            --surface: rgba(255, 255, 255, 0.98);
             --text: #1e293b;
+            --border: #cbd5e1;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
+        
         body { 
             font-family: 'Outfit', sans-serif; 
             background: var(--bg-gradient); 
@@ -30,7 +32,7 @@
             max-width: 600px; 
             width: 100%; 
             border-radius: 24px; 
-            box-shadow: 0 25px 50px rgba(0,0,0,0.1); 
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15); 
             overflow: hidden; 
         }
         
@@ -42,32 +44,35 @@
         }
         
         .logo { font-size: 42px; font-weight: 800; letter-spacing: 4px; margin: 0; }
+        .header p { opacity: 0.9; font-size: 13px; margin-top: 10px; font-weight: 500; letter-spacing: 1px; text-transform: uppercase; }
         
         form { padding: 30px 40px; }
+        
         .section-title { 
             font-size: 14px; 
             font-weight: 700; 
             color: var(--primary); 
             text-transform: uppercase; 
             margin: 25px 0 15px; 
-            border-bottom: 1px solid #eee; 
+            border-bottom: 2px solid #f1f5f9; 
             padding-bottom: 5px; 
         }
         
-        .field { margin-bottom: 20px; }
-        label { display: block; font-weight: 600; font-size: 14px; margin-bottom: 8px; }
+        .field { margin-bottom: 18px; }
+        label { display: block; font-weight: 600; font-size: 14px; margin-bottom: 8px; color: var(--text); }
         
         input, select, textarea { 
             width: 100%; 
             padding: 14px; 
-            border: 2px solid #cbd5e1; 
+            border: 2px solid var(--border); 
             border-radius: 12px; 
             font-size: 15px; 
-            transition: 0.3s; 
-            background: white;
+            transition: all 0.3s ease; 
+            background: #fff;
+            font-family: inherit;
         }
         
-        input:focus, textarea:focus { border-color: var(--primary); outline: none; }
+        input:focus, textarea:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1); }
         
         .row { display: flex; gap: 15px; }
         .row > div { flex: 1; }
@@ -77,35 +82,37 @@
             padding: 25px; 
             text-align: center; 
             border-radius: 15px; 
-            background: rgba(79, 70, 229, 0.05); 
+            background: rgba(79, 70, 229, 0.03); 
             cursor: pointer; 
             transition: 0.3s;
         }
         
-        .file-box:hover { background: rgba(79, 70, 229, 0.1); }
+        .file-box:hover { background: rgba(79, 70, 229, 0.08); }
 
         .btn { 
             width: 100%; 
             background: linear-gradient(135deg, var(--primary), var(--secondary)); 
             color: white; 
             border: none; 
-            padding: 18px; 
+            padding: 20px; 
             border-radius: 12px; 
-            font-weight: 700; 
+            font-weight: 800; 
             font-size: 17px; 
             cursor: pointer; 
-            margin-top: 20px; 
-            box-shadow: 0 10px 20px rgba(79, 70, 229, 0.2); 
+            margin-top: 25px; 
+            box-shadow: 0 10px 20px rgba(79, 70, 229, 0.3); 
             transition: 0.3s; 
+            letter-spacing: 1px;
         }
         
-        .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+        .btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none !important; }
         
-        #status { text-align: center; margin-top: 15px; font-weight: 600; font-size: 14px; }
+        #status { text-align: center; margin-top: 20px; font-weight: 700; font-size: 15px; min-height: 24px; padding: 10px; border-radius: 8px; }
         
         @media (max-width: 600px) {
             .row { flex-direction: column; gap: 0; }
-            form { padding: 20px; }
+            form { padding: 25px 20px; }
+            .logo { font-size: 32px; }
         }
     </style>
 </head>
@@ -114,24 +121,24 @@
 <div class="container">
     <div class="header">
         <h1 class="logo">ARGON</h1>
-        <p style="opacity: 0.8; font-size: 13px; margin-top: 10px; font-weight: 500; letter-spacing: 1px;">ДЕПАРТАМЕНТ РОЗВИТКУ МЕРЕЖІ</p>
+        <p>Департамент розвитку мережі</p>
     </div>
 
     <form id="argonForm">
-        <div class="section-title">📍 Локація та комерція</div>
+        <div class="section-title">📍 Локація та ціна</div>
         <div class="field">
             <label>Адреса об'єкта *</label>
-            <input type="text" name="address" required placeholder="Місто, вулиця, номер">
+            <input type="text" name="address" id="address" required placeholder="Вулиця, номер, місто">
         </div>
 
         <div class="row">
             <div class="field">
                 <label>Площа (м²) *</label>
-                <input type="number" name="area" required>
+                <input type="number" name="area" id="area" required placeholder="0">
             </div>
             <div class="field">
                 <label>Оренда (грн/міс) *</label>
-                <input type="number" name="price" required>
+                <input type="number" name="price" id="price" required placeholder="0">
             </div>
         </div>
 
@@ -139,11 +146,11 @@
         <div class="row">
             <div class="field">
                 <label>Електроенергія (кВт)</label>
-                <input type="text" name="power" placeholder="50 кВт">
+                <input type="text" name="power" id="power" placeholder="50 кВт">
             </div>
             <div class="field">
                 <label>Поверх</label>
-                <select name="floor">
+                <select name="floor" id="floor">
                     <option value="1 поверх">1 поверх</option>
                     <option value="Цоколь">Цоколь</option>
                     <option value="Інший">Інший</option>
@@ -153,88 +160,93 @@
 
         <div class="field">
             <label>Додаткові деталі (стан, ремонт)</label>
-            <textarea name="message" rows="3" placeholder="Опишіть об'єкт..."></textarea>
+            <textarea name="message" id="message" rows="3" placeholder="Опишіть стан приміщення..."></textarea>
         </div>
 
-        <div class="section-title">📸 Фото та техпаспорт</div>
+        <div class="section-title">📸 Документація</div>
         <div class="file-box" onclick="document.getElementById('fileInput').click()">
-            <strong id="fileLabel" style="color: var(--primary);">📎 Прикріпити файл</strong>
-            <input type="file" id="fileInput" style="display:none" onchange="updateFileName()">
+            <strong id="fileLabel" style="color: var(--primary);">📎 Прикріпити фото / техпаспорт</strong>
+            <input type="file" id="fileInput" style="display:none" onchange="updateLabel()">
         </div>
 
-        <button type="submit" id="submitBtn" class="btn">ВІДПРАВИТИ ПРОПОЗИЦІЮ</button>
+        <button type="submit" id="submitBtn" class="btn">НАДІСЛАТИ ПРОПОЗИЦІЮ</button>
         <div id="status"></div>
     </form>
 </div>
 
 <script>
-    // ВАШЕ ПІДТВЕРДЖЕНЕ ПОСИЛАННЯ
+    // ПРЯМЕ ПОСИЛАННЯ НА ВАШ СКРИПТ
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwE5wIUB395tnZjbozQW-ZtXcfEzsWAXIVZFrL84wdKucxZZqpxkGr5BCcnrjx-NHurOw/exec";
 
-    function updateFileName() {
+    function updateLabel() {
         const input = document.getElementById('fileInput');
-        document.getElementById('fileLabel').innerText = input.files.length > 0 ? "✅ Вибрано: " + input.files[0].name : "📎 Прикріпити файл";
+        const label = document.getElementById('fileLabel');
+        label.innerText = input.files.length > 0 ? "✅ Вибрано: " + input.files[0].name : "📎 Прикріпити фото / техпаспорт";
     }
 
     document.getElementById('argonForm').addEventListener('submit', function(e) {
         e.preventDefault();
         const btn = document.getElementById('submitBtn');
         const status = document.getElementById('status');
-        const file = document.getElementById('fileInput').files[0];
+        const fileInput = document.getElementById('fileInput');
         
         btn.disabled = true;
-        btn.innerText = "ОБРОБКА ТА ВІДПРАВКА...";
-        status.innerText = "";
+        btn.innerText = "ВІДПРАВКА...";
+        status.style.color = "#4F46E5";
+        status.style.background = "transparent";
+        status.innerText = "⏳ Будь ласка, зачекайте, дані завантажуються...";
 
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(f) {
-                const base64Data = f.target.result.split(',')[1];
-                sendToGoogle(base64Data, file.name, file.type);
-            };
-            reader.readAsDataURL(file);
-        } else {
-            sendToGoogle(null, null, null);
-        }
+        const sendData = (base64, fileName, fileType) => {
+            const formData = new URLSearchParams();
+            formData.append('address', document.getElementById('address').value);
+            formData.append('area', document.getElementById('area').value);
+            formData.append('price', document.getElementById('price').value);
+            formData.append('power', document.getElementById('power').value);
+            formData.append('floor', document.getElementById('floor').value);
+            formData.append('message', document.getElementById('message').value);
 
-        function sendToGoogle(base64, fileName, fileType) {
-            const formData = new FormData(document.getElementById('argonForm'));
-            
-            // Збираємо параметри для URL
-            const params = new URLSearchParams();
-            formData.forEach((value, key) => {
-                params.append(key, value);
-            });
-            
-            // Додаємо дані файлу, якщо вони є
             if (base64) {
-                params.append('fileData', base64);
-                params.append('fileName', fileName);
-                params.append('fileType', fileType);
+                formData.append('fileData', base64);
+                formData.append('fileName', fileName);
+                formData.append('fileType', fileType);
             }
 
-            // Відправка
             fetch(SCRIPT_URL, {
                 method: 'POST',
-                mode: 'no-cors', // Важливо для Google Scripts
+                mode: 'no-cors', 
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: params.toString()
+                body: formData.toString()
             })
             .then(() => {
                 status.style.color = "#10b981";
-                status.innerHTML = "✅ Успішно! Дані збережено в таблиці, файл завантажено.";
-                document.getElementById('argonForm').reset();
-                document.getElementById('fileLabel').innerText = "📎 Прикріпити файл";
+                status.style.background = "#ecfdf5";
+                status.innerHTML = "✅ Успішно надіслано! Перевірте таблицю.";
+                this.reset();
+                document.getElementById('fileLabel').innerText = "📎 Прикріпити фото / техпаспорт";
+                window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
             })
             .catch(err => {
                 status.style.color = "#ef4444";
-                status.innerHTML = "❌ Помилка відправки. Перевірте з'єднання.";
+                status.style.background = "#fef2f2";
+                status.innerHTML = "❌ Помилка відправки. Спробуйте ще раз.";
                 console.error(err);
             })
             .finally(() => {
                 btn.disabled = false;
-                btn.innerText = "ВІДПРАВИТИ ПРОПОЗИЦІЮ";
+                btn.innerText = "НАДІСЛАТИ ПРОПОЗИЦІЮ";
             });
+        };
+
+        if (fileInput.files.length > 0) {
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+            reader.onload = (f) => {
+                const base64Data = f.target.result.split(',')[1];
+                sendData(base64Data, file.name, file.type);
+            };
+            reader.readAsDataURL(file);
+        } else {
+            sendData(null, null, null);
         }
     });
 </script>
