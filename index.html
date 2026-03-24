@@ -69,18 +69,19 @@
 
         .btn {
             width: 100%; background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white; border: none; padding: 16px; border-radius: 12px;
+            color: white; border: none; padding: 18px; border-radius: 12px;
             font-size: 16px; font-weight: 700; cursor: pointer; margin-top: 20px;
+            box-shadow: 0 10px 20px rgba(79, 70, 229, 0.2);
         }
 
         /* Selector styling */
         .selector { display: flex; background: #e2e8f0; padding: 4px; border-radius: 10px; position: relative; }
         .selector input { display: none; }
-        .selector label { flex: 1; text-align: center; padding: 8px; cursor: pointer; font-weight: 600; z-index: 2; font-size: 13px; }
+        .selector label { flex: 1; text-align: center; padding: 8px; cursor: pointer; font-weight: 600; z-index: 2; font-size: 13px; transition: 0.3s; }
         .slider {
             position: absolute; top: 4px; bottom: 4px; left: 4px;
             width: calc(33.33% - 4px); background: white; border-radius: 7px;
-            transition: transform 0.3s ease; z-index: 1;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); z-index: 1;
         }
         #w1:checked ~ .slider, #d1:checked ~ .slider { transform: translateX(0); }
         #w2:checked ~ .slider, #d2:checked ~ .slider { transform: translateX(100%); }
@@ -98,72 +99,79 @@
 <div class="container">
     <div class="header">
         <h1 class="logo">ARGON</h1>
-        <p>Анкета об'єкта</p>
+        <p>Департамент розвитку мережі</p>
     </div>
 
     <form action="https://forminit.com/f/s5sa0f3ulyq" method="POST" enctype="multipart/form-data">
         
-        <div class="section-title">Основні дані</div>
+        <div class="section-title">📍 Локація та ціна</div>
         
         <div class="field">
-            <label>Адреса *</label>
-            <input type="text" name="Адреса" required>
+            <label>Адреса об'єкта *</label>
+            <input type="text" name="address" placeholder="Вулиця, номер, місто" required>
         </div>
 
         <div class="row">
             <div class="field">
                 <label>Площа (м²) *</label>
-                <input type="number" name="Площа" required>
+                <input type="number" name="area" placeholder="0" required>
             </div>
             <div class="field">
-                <label>Вартість (грн) *</label>
-                <input type="number" name="Вартість" required>
+                <label>Оренда (грн/міс) *</label>
+                <input type="number" name="price" placeholder="0" required>
             </div>
         </div>
 
-        <div class="section-title">Технічні параметри</div>
+        <div class="section-title">⚡ Технічні характеристики</div>
 
         <div class="field">
             <label>Водопостачання *</label>
             <div class="selector">
-                <input type="radio" name="Вода" id="w1" value="Так" onclick="toggle('w_ext', false)" required checked>
+                <input type="radio" name="water" id="w1" value="Так" onclick="toggle('w_ext', false)" required checked>
                 <label for="w1">Так</label>
-                <input type="radio" name="Вода" id="w2" value="Ні" onclick="toggle('w_ext', false)">
+                <input type="radio" name="water" id="w2" value="Ні" onclick="toggle('w_ext', false)">
                 <label for="w2">Ні</label>
-                <input type="radio" name="Вода" id="w3" value="Свій варіант" onclick="toggle('w_ext', true)">
+                <input type="radio" name="water" id="w3" value="Свій варіант" onclick="toggle('w_ext', true)">
                 <label for="w3">Варіант</label>
                 <div class="slider"></div>
             </div>
-            <input type="text" id="w_ext" name="Вода_деталі" class="hidden-input" placeholder="Деталі...">
+            <input type="text" id="w_ext" name="water_details" class="hidden-input" placeholder="Деталі водопостачання...">
         </div>
 
         <div class="row">
             <div class="field">
                 <label>Потужність (кВт) *</label>
-                <input type="text" name="Потужність" required>
+                <input type="text" name="electricity_power" placeholder="Наприклад: 50" required>
             </div>
             <div class="field">
                 <label>Поверх *</label>
-                <select name="Поверх">
+                <select name="floor_level">
                     <option value="1 поверх">1 поверх</option>
                     <option value="Цоколь">Цоколь</option>
+                    <option value="Інше">Інше</option>
                 </select>
             </div>
         </div>
 
         <div class="field">
-            <label>Ремонт</label>
-            <textarea name="Ремонт" rows="2"></textarea>
+            <label>Парковка (місць)</label>
+            <input type="number" name="parking_spots" placeholder="0">
         </div>
 
-        <div class="section-title">Файли</div>
+        <div class="field">
+            <label>Ремонт та стан</label>
+            <textarea name="repair_description" rows="2" placeholder="Опишіть стан..."></textarea>
+        </div>
+
+        <div class="section-title">📸 Фото та техпаспорт</div>
         
         <div class="file-box" onclick="document.getElementById('f').click()">
-            <span id="f_txt" style="font-size: 14px; color: var(--primary); font-weight: 600;">📎 Додати фото</span>
-            <input type="file" id="f" name="Файли" multiple style="display:none" onchange="up()">
+            <span id="f_txt" style="font-size: 14px; color: var(--primary); font-weight: 700;">📎 Додати файли</span>
+            <input type="file" id="f" name="attachments" multiple style="display:none" onchange="up()">
+            <p style="font-size: 11px; color: var(--text-muted); margin-top: 5px;">Натисніть сюди для вибору фото</p>
         </div>
 
-        <button type="submit" class="btn">ВІДПРАВИТИ</button>
+        <button type="submit" class="btn">ВІДПРАВИТИ ПРОПОЗИЦІЮ</button>
     </form>
 </div>
 
@@ -171,7 +179,7 @@
     function toggle(id, show) { document.getElementById(id).style.display = show ? 'block' : 'none'; }
     function up() {
         const input = document.getElementById('f');
-        document.getElementById('f_txt').innerText = input.files.length > 0 ? "Вибрано: " + input.files.length : "📎 Додати фото";
+        document.getElementById('f_txt').innerText = input.files.length > 0 ? "✅ Вибрано: " + input.files.length : "📎 Додати файли";
     }
 </script>
 
