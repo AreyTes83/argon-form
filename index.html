@@ -3,81 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Argon — Оренда нерухомості</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+    <title>Argon — Нерухомість</title>
     <script src="https://forminit.com/sdk/v1/forminit.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary: #4F46E5;
-            --secondary: #EC4899;
-            --text: #1e293b;
-        }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Outfit', sans-serif; background: #eef2f7; display: flex; justify-content: center; padding: 20px; }
-        .card { background: white; max-width: 550px; width: 100%; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); overflow: hidden; }
-        .header { background: linear-gradient(135deg, var(--primary), var(--secondary)); padding: 40px 20px; text-align: center; color: white; }
-        .logo { font-size: 35px; font-weight: 800; letter-spacing: 3px; }
-        form { padding: 30px; }
-        label { display: block; font-weight: 600; font-size: 14px; margin-bottom: 8px; color: var(--text); }
-        input, select, textarea { width: 100%; padding: 12px; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 15px; margin-bottom: 20px; font-family: inherit; }
-        input:focus { border-color: var(--primary); outline: none; }
-        .row { display: flex; gap: 15px; }
-        .row > div { flex: 1; }
-        .file-box { border: 2px dashed var(--primary); padding: 20px; text-align: center; border-radius: 12px; background: #f8fbff; cursor: pointer; margin-bottom: 10px; }
-        .btn { width: 100%; background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; border: none; padding: 18px; border-radius: 12px; font-weight: 700; font-size: 16px; cursor: pointer; transition: 0.3s; }
-        #result { text-align: center; font-weight: 600; margin-top: 15px; font-size: 14px; min-height: 20px; }
-        .success { color: #10b981; }
-        .error { color: #ef4444; }
+        body { font-family: 'Outfit', sans-serif; background: #f0f2f5; display: flex; justify-content: center; padding: 20px; }
+        .card { background: white; max-width: 500px; width: 100%; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); overflow: hidden; }
+        .header { background: #4F46E5; color: white; padding: 30px; text-align: center; }
+        form { padding: 25px; }
+        label { display: block; font-weight: 600; margin-bottom: 5px; font-size: 14px; }
+        input, select, textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 15px; font-size: 15px; }
+        .btn { width: 100%; background: #4F46E5; color: white; border: none; padding: 15px; border-radius: 8px; font-weight: 700; cursor: pointer; }
+        .btn:disabled { background: #ccc; }
+        #status { text-align: center; margin-top: 15px; font-weight: 600; font-size: 14px; }
     </style>
 </head>
 <body>
 
 <div class="card">
-    <div class="header">
-        <div class="logo">ARGON</div>
-        <p style="opacity: 0.9; text-transform: uppercase; font-size: 11px; letter-spacing: 1px; margin-top: 5px;">Відділ розвитку мережі</p>
-    </div>
-
+    <div class="header"><h1>ARGON</h1></div>
     <form id="argon-form">
         <label>Адреса об'єкта *</label>
-        <input type="text" name="address" placeholder="Місто, вулиця, номер" required>
+        <input type="text" name="address" required>
 
-        <div class="row">
-            <div>
-                <label>Площа (м²) *</label>
+        <div style="display:flex; gap:10px;">
+            <div style="flex:1">
+                <label>Площа (м²)</label>
                 <input type="number" name="area" required>
             </div>
-            <div>
-                <label>Ціна (грн/міс) *</label>
+            <div style="flex:1">
+                <label>Ціна (грн)</label>
                 <input type="number" name="price" required>
             </div>
         </div>
 
-        <div class="row">
-            <div>
-                <label>Електроенергія (кВт)</label>
-                <input type="text" name="power" placeholder="50">
-            </div>
-            <div>
-                <label>Поверх</label>
-                <select name="floor">
-                    <option value="1">1 поверх</option>
-                    <option value="0">Цоколь</option>
-                </select>
-            </div>
-        </div>
+        <label>Потужність (кВт)</label>
+        <input type="text" name="power">
 
-        <label>Стан та ремонт</label>
-        <textarea name="message" rows="3" placeholder="Опишіть об'єкт..."></textarea>
+        <label>Опис об'єкта</label>
+        <textarea name="description" rows="3"></textarea>
 
-        <label>Фото та документи</label>
-        <div class="file-box" onclick="document.getElementById('file_input').click()">
-            <span id="file_text" style="color: var(--primary); font-weight: 600;">📎 Прикріпити файли</span>
-            <input type="file" name="attachments" id="file_input" multiple style="display:none;" onchange="updateFiles()">
-        </div>
+        <label>Фото / Документи</label>
+        <input type="file" name="file" id="file_up" multiple>
 
         <button type="submit" id="submit-btn" class="btn">ВІДПРАВИТИ</button>
-        <div id="result"></div>
+        <div id="status"></div>
     </form>
 </div>
 
@@ -85,41 +55,41 @@
     const forminit = new Forminit();
     const FORM_ID = "s5sa0f3ulyq";
 
-    // Візуалізація вибору файлів
-    function updateFiles() {
-        const input = document.getElementById('file_input');
-        document.getElementById('file_text').innerText = input.files.length > 0 ? "✅ Вибрано: " + input.files.length : "📎 Прикріпити файли";
-    }
-
-    // Обробка відправки через SDK
-    document.getElementById("argon-form").addEventListener("submit", async (e) => {
+    document.getElementById("argon-form").addEventListener("submit", async function(e) {
         e.preventDefault();
         
         const btn = document.getElementById("submit-btn");
-        const result = document.getElementById("result");
+        const status = document.getElementById("status");
         
         btn.disabled = true;
-        btn.innerText = "ВІДПРАВКА...";
-        result.textContent = "";
+        btn.innerText = "Відправка...";
+        status.innerText = "";
 
-        const formData = new FormData(e.target);
-        
-        // Використовуємо SDK для відправки
-        const { data, error } = await forminit.submit(FORM_ID, formData);
+        try {
+            // Отримуємо дані безпосередньо з форми
+            const myForm = document.getElementById("argon-form");
+            const formData = new FormData(myForm);
 
-        btn.disabled = false;
-        btn.innerText = "ВІДПРАВИТИ";
+            // Відправка через SDK
+            const result = await forminit.submit(FORM_ID, formData);
 
-        if (error) {
-            result.className = "error";
-            result.textContent = "Помилка: " + error.message;
-            return;
+            if (result.error) {
+                console.error("Forminit Error:", result.error);
+                status.style.color = "red";
+                status.innerText = "Помилка: " + result.error.message;
+            } else {
+                status.style.color = "green";
+                status.innerText = "Успішно надіслано!";
+                myForm.reset();
+            }
+        } catch (err) {
+            console.error("JS Error:", err);
+            status.style.color = "red";
+            status.innerText = "Сталася помилка в скрипті.";
+        } finally {
+            btn.disabled = false;
+            btn.innerText = "ВІДПРАВИТИ";
         }
-
-        result.className = "success";
-        result.textContent = "Дякуємо! Пропозицію успішно надіслано.";
-        e.target.reset();
-        document.getElementById('file_text').innerText = "📎 Прикріпити файли";
     });
 </script>
 
