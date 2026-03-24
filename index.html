@@ -3,20 +3,105 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Argon — Оренда</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;800&display=swap" rel="stylesheet">
+    <title>Argon — Оренда нерухомості</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #4F46E5; --secondary: #EC4899; }
-        body { font-family: 'Outfit', sans-serif; background: #f0f2f5; display: flex; justify-content: center; padding: 20px; }
-        .card { background: white; max-width: 500px; width: 100%; border-radius: 20px; box-shadow: 0 15px 30px rgba(0,0,0,0.1); overflow: hidden; border-top: 6px solid var(--primary); }
-        .header { padding: 30px; text-align: center; background: #fff; border-bottom: 1px solid #eee; }
-        .logo { font-size: 32px; font-weight: 800; color: var(--primary); letter-spacing: 2px; }
+        :root {
+            --primary: #4F46E5;
+            --secondary: #EC4899;
+            --text-main: #1e293b;
+            --border: #cbd5e1;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #f0f4fd 0%, #c3cfe2 100%);
+            display: flex;
+            justify-content: center;
+            padding: 40px 20px;
+            margin: 0;
+        }
+
+        .card {
+            background: #ffffff;
+            max-width: 550px;
+            width: 100%;
+            border-radius: 20px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            border-top: 8px solid var(--primary);
+        }
+
+        .header {
+            padding: 30px;
+            text-align: center;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .logo {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--primary);
+            letter-spacing: 2px;
+        }
+
         form { padding: 30px; }
-        label { display: block; font-weight: 600; font-size: 14px; margin-bottom: 8px; color: #333; }
-        input, select, textarea { width: 100%; padding: 12px; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 15px; margin-bottom: 20px; font-family: inherit; }
-        .btn { width: 100%; background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; border: none; padding: 18px; border-radius: 12px; font-weight: 700; font-size: 16px; cursor: pointer; transition: 0.3s; }
-        .btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(79, 70, 229, 0.3); }
-        .file-info { font-size: 12px; color: #64748b; margin-top: -10px; margin-bottom: 20px; }
+
+        label {
+            display: block;
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 8px;
+            color: var(--text-main);
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 15px;
+            margin-bottom: 20px;
+            font-family: inherit;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+
+        .row {
+            display: flex;
+            gap: 15px;
+        }
+
+        .row > div { flex: 1; }
+
+        .btn {
+            width: 100%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 18px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(79, 70, 229, 0.2);
+        }
+
+        .file-help {
+            font-size: 12px;
+            color: #64748b;
+            margin-top: -15px;
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 <body>
@@ -24,42 +109,47 @@
 <div class="card">
     <div class="header">
         <div class="logo">ARGON</div>
-        <p style="font-size: 12px; color: #666; margin-top: 5px;">АНКЕТА ОБ'ЄКТА</p>
+        <p style="font-size: 12px; color: #64748b; margin-top: 5px; font-weight: 600;">АНКЕТА ОБ'ЄКТА</p>
     </div>
 
     <form action="https://forminit.com/f/s5sa0f3ulyq" method="POST" enctype="multipart/form-data">
         
         <label>Адреса об'єкта *</label>
-        <input type="text" name="address" required placeholder="Місто, вулиця, номер">
+        <input type="text" name="name" required placeholder="Місто, вулиця, номер">
 
-        <div style="display: flex; gap: 15px;">
-            <div style="flex: 1;">
+        <div class="row">
+            <div>
                 <label>Площа (м²) *</label>
                 <input type="number" name="area" required>
             </div>
-            <div style="flex: 1;">
-                <label>Ціна (грн/міс) *</label>
+            <div>
+                <label>Оренда (грн/міс) *</label>
                 <input type="number" name="price" required>
             </div>
         </div>
 
-        <label>Електроенергія (кВт)</label>
-        <input type="text" name="power" placeholder="50">
+        <div class="row">
+            <div>
+                <label>Електроенергія (кВт)</label>
+                <input type="text" name="power" placeholder="50">
+            </div>
+            <div>
+                <label>Поверх</label>
+                <select name="floor">
+                    <option value="1">1 поверх</option>
+                    <option value="0">Цоколь</option>
+                </select>
+            </div>
+        </div>
 
-        <label>Поверх</label>
-        <select name="floor">
-            <option value="1 поверх">1 поверх</option>
-            <option value="Цоколь">Цоколь</option>
-        </select>
-
-        <label>Додаткова інформація</label>
-        <textarea name="message" rows="3" placeholder="Опишіть стан ремонту тощо..."></textarea>
+        <label>Додаткові деталі (ремонт, вода, каналізація)</label>
+        <textarea name="message" rows="4" placeholder="Опишіть стан приміщення та комунікації..."></textarea>
 
         <label>Фото та техпаспорт</label>
         <input type="file" name="file" multiple>
-        <p class="file-info">Можна вибрати декілька файлів відразу</p>
+        <p class="file-help">Можна обрати декілька файлів відразу</p>
 
-        <button type="submit" class="btn">ВІДПРАВИТИ</button>
+        <button type="submit" class="btn">ВІДПРАВИТИ ПРОПОЗИЦІЮ</button>
     </form>
 </div>
 
