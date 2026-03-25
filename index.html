@@ -49,10 +49,10 @@
         <div class="header"><p class="subtitle">Анкета приміщення</p></div>
         <form id="argonForm">
             <div class="section-title">📍 Локація</div>
-            <div class="field"><label>Адреса приміщення *</label><input type="text" id="addressInput" name="address" required></div>
+            <div class="field"><label>Адреса приміщення *</label><input type="text" id="addressInput" required></div>
             <div class="row">
-                <div class="field"><label>Площа (м²) *</label><input type="number" id="areaInput" name="area" required></div>
-                <div class="field"><label>Оренда (грн) *</label><input type="number" id="priceInput" name="price" required></div>
+                <div class="field"><label>Площа (м²) *</label><input type="number" id="areaInput" required></div>
+                <div class="field"><label>Оренда (грн) *</label><input type="number" id="priceInput" required></div>
             </div>
 
             <div class="section-title">💧 Комунікації</div>
@@ -63,7 +63,7 @@
                     <label><input type="radio" name="water" value="Ні" onclick="document.getElementById('w_c').style.display='none'"><span>Ні</span></label>
                     <label><input type="radio" name="water" value="Інше" onclick="document.getElementById('w_c').style.display='block'"><span>Інше</span></label>
                 </div>
-                <input type="text" id="w_c" name="water_custom" style="display:none; margin-top:10px" placeholder="Опишіть...">
+                <input type="text" id="w_c" style="display:none; margin-top:10px" placeholder="Опишіть...">
             </div>
 
             <div class="field">
@@ -73,16 +73,16 @@
                     <label><input type="radio" name="sewer" value="Ні" onclick="document.getElementById('s_c').style.display='none'"><span>Ні</span></label>
                     <label><input type="radio" name="sewer" value="Інше" onclick="document.getElementById('s_c').style.display='block'"><span>Інше</span></label>
                 </div>
-                <input type="text" id="s_c" name="sewer_custom" style="display:none; margin-top:10px" placeholder="Опишіть...">
+                <input type="text" id="s_c" style="display:none; margin-top:10px" placeholder="Опишіть...">
             </div>
 
             <div class="section-title">⚡ Технічні дані</div>
             <div class="row">
-                <div class="field"><label>Потужність (кВт)</label><input type="text" id="powerInput" name="power"></div>
-                <div class="field"><label>Поверх</label><select id="floorInput" name="floor"><option value="Перший поверх">Перший поверх</option><option value="Цоколь">Цоколь</option></select></div>
+                <div class="field"><label>Потужність (кВт)</label><input type="text" id="powerInput"></div>
+                <div class="field"><label>Поверх</label><select id="floorInput"><option value="Перший поверх">Перший поверх</option><option value="Цоколь">Цоколь</option></select></div>
             </div>
-            <div class="field"><label>Парковка (місць)</label><input type="number" id="parkingInput" name="parking" value="0"></div>
-            <div class="field"><label>Ремонт</label><textarea id="repairInput" name="repair" rows="2"></textarea></div>
+            <div class="field"><label>Парковка (місць)</label><input type="number" id="parkingInput" value="0"></div>
+            <div class="field"><label>Ремонт</label><textarea id="repairInput" rows="2"></textarea></div>
 
             <div class="section-title">📸 Файли</div>
             <div class="file-box" onclick="document.getElementById('fileInput').click()">
@@ -98,7 +98,9 @@
             <h2>Майже готово!</h2>
             <p class="subtitle">Ваш номер телефону</p>
         </div>
-        <div class="field"><input type="tel" id="userPhoneInput" placeholder="+380" required></div>
+        <div class="field">
+            <input type="tel" id="userPhoneInput" value="+380" maxlength="13">
+        </div>
         <button class="btn" id="finalSubmitBtn" onclick="submitAllData()">Надіслати</button>
         <div id="status" style="text-align:center; margin-top:15px; font-weight:700;"></div>
     </div>
@@ -115,6 +117,15 @@
 <script>
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzDRgsPCTgv-5Hnz4KUiu6ejjjDzZlXSPtfFD0FhU2RkSfvca1jyNDTlVgh1WYUWCSH1w/exec";
     
+    // Маска телефону
+    const phoneInput = document.getElementById('userPhoneInput');
+    phoneInput.addEventListener('input', function (e) {
+        if (!e.target.value.startsWith('+380')) {
+            e.target.value = '+380';
+        }
+        e.target.value = e.target.value.replace(/[^\d+]/g, ''); // тільки цифри та +
+    });
+
     function nextStep(n) {
         if (n === 2 && !document.getElementById('userNameInput').value) return alert("Введіть ім'я");
         if (n === 3 && !document.getElementById('argonForm').checkValidity()) return document.getElementById('argonForm').reportValidity();
@@ -128,9 +139,8 @@
     }
 
     async function submitAllData() {
-        const name = document.getElementById('userNameInput').value;
         const phone = document.getElementById('userPhoneInput').value;
-        if (!phone) return alert("Вкажіть номер телефону");
+        if (phone.length < 13) return alert("Введіть коректний номер телефону (+380XXXXXXXXX)");
 
         const btn = document.getElementById('finalSubmitBtn');
         const status = document.getElementById('status');
@@ -138,19 +148,18 @@
         btn.innerText = "ВІДПРАВКА...";
         status.innerText = "⌛ Завантаження...";
 
-        const form = document.getElementById('argonForm');
-        const rawData = new FormData(form);
-        const files = document.getElementById('fileInput').files;
+        // Збір комунікацій
+        const waterRadio = document.querySelector('input[name="water"]:checked').value;
+        const sewerRadio = document.querySelector('input[name="sewer"]:checked').value;
 
-        // Явно збираємо кожне поле за ID
         const payload = {
-            userName: name,
+            userName: document.getElementById('userNameInput').value,
             userPhone: phone,
             address: document.getElementById('addressInput').value,
             area: document.getElementById('areaInput').value,
             price: document.getElementById('priceInput').value,
-            water: rawData.get('water') === 'Інше' ? document.getElementById('w_c').value : rawData.get('water'),
-            sewer: rawData.get('sewer') === 'Інше' ? document.getElementById('s_c').value : rawData.get('sewer'),
+            water: waterRadio === 'Інше' ? document.getElementById('w_c').value : waterRadio,
+            sewer: sewerRadio === 'Інше' ? document.getElementById('s_c').value : sewerRadio,
             power: document.getElementById('powerInput').value,
             floor: document.getElementById('floorInput').value,
             parking: document.getElementById('parkingInput').value,
@@ -158,13 +167,14 @@
             files: []
         };
 
-        for (let i = 0; i < files.length; i++) {
-            const base64 = await new Promise((resolve) => {
+        const fileInput = document.getElementById('fileInput');
+        for (let i = 0; i < fileInput.files.length; i++) {
+            const base64 = await new Promise((r) => {
                 const rd = new FileReader();
-                rd.onload = (f) => resolve(f.target.result.split(',')[1]);
-                rd.readAsDataURL(files[i]);
+                rd.onload = (f) => r(f.target.result.split(',')[1]);
+                rd.readAsDataURL(fileInput.files[i]);
             });
-            payload.files.push({ base64: base64, name: files[i].name, type: files[i].type });
+            payload.files.push({ base64, name: fileInput.files[i].name, type: fileInput.files[i].type });
         }
 
         fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) })
