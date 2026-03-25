@@ -9,43 +9,27 @@
         :root { --primary: #E30613; --bg: #f8fafc; --text: #1e293b; --border: #cbd5e1; }
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: 'Outfit', sans-serif; background: var(--bg); padding: 10px; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-        
-        .container { background: #fff; max-width: 650px; width: 100%; border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); border-top: 8px solid var(--primary); overflow: hidden; position: relative; }
-        
+        .container { background: #fff; max-width: 650px; width: 100%; border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); border-top: 8px solid var(--primary); overflow: hidden; }
         .step { display: none; padding: 30px 20px; animation: fadeIn 0.4s ease; }
         .step.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
-
-        .header { text-align: center; margin-bottom: 25px; }
+        .header { text-align: center; margin-bottom: 20px; }
         .logo-img { max-width: 180px; height: auto; margin-bottom: 10px; }
         h2 { color: var(--text); font-weight: 800; font-size: 22px; margin-bottom: 8px; }
-        p.subtitle { color: #64748b; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
-
-        .field { margin-bottom: 18px; }
-        label { display: block; font-weight: 700; font-size: 14px; margin-bottom: 8px; color: #334155; }
+        p.subtitle { color: #64748b; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+        .field { margin-bottom: 15px; }
+        label { display: block; font-weight: 700; font-size: 14px; margin-bottom: 6px; color: #334155; }
         input, select, textarea { width: 100%; padding: 12px; border: 2px solid var(--border); border-radius: 12px; font-size: 16px; font-family: inherit; }
         input:focus { border-color: var(--primary); outline: none; }
-
         .row { display: flex; gap: 12px; }
-        
-        /* Виправлений стиль кнопок для мобілок */
         .radio-group { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 5px; }
-        .radio-group label { 
-            flex: 1; min-width: 80px; padding: 12px 5px; border: 2px solid var(--border); 
-            border-radius: 10px; text-align: center; cursor: pointer; background: #fff;
-            font-size: 14px; font-weight: 600; margin-bottom: 0;
-        }
+        .radio-group label { flex: 1; min-width: 80px; padding: 12px 5px; border: 2px solid var(--border); border-radius: 10px; text-align: center; cursor: pointer; background: #fff; font-size: 14px; font-weight: 600; }
         .radio-group input { display: none; }
-        .radio-group label:has(input:checked) { border-color: var(--primary); background: rgba(227, 6, 19, 0.05); color: var(--primary); }
-
+        .radio-group label:has(input:checked) { border-color: var(--primary); background: rgba(227, 6, 19, 0.05); color: var(--primary); font-weight: 800; }
         .file-box { border: 2px dashed var(--primary); padding: 25px; text-align: center; border-radius: 15px; background: rgba(227, 6, 19, 0.02); cursor: pointer; }
         .btn { width: 100%; background: var(--primary); color: white; border: none; padding: 18px; border-radius: 12px; font-weight: 800; font-size: 16px; cursor: pointer; margin-top: 15px; text-transform: uppercase; }
         .section-title { font-size: 11px; font-weight: 800; color: var(--primary); text-transform: uppercase; margin: 20px 0 10px; border-bottom: 2px solid #f1f5f9; padding-bottom: 5px; }
-
-        @media (max-width: 480px) { 
-            .row { flex-direction: column; gap: 0; }
-            .radio-group label { min-width: 45%; }
-        }
+        @media (max-width: 480px) { .row { flex-direction: column; gap: 0; } .radio-group label { min-width: 45%; } }
     </style>
 </head>
 <body>
@@ -73,7 +57,7 @@
 
             <div class="section-title">💧 Комунікації</div>
             <div class="field">
-                <label>Водопостачання</label>
+                <label>Водопостачання *</label>
                 <div class="radio-group">
                     <label><input type="radio" name="water" value="Так" checked onclick="document.getElementById('w_c').style.display='none'"><span>Так</span></label>
                     <label><input type="radio" name="water" value="Ні" onclick="document.getElementById('w_c').style.display='none'"><span>Ні</span></label>
@@ -83,7 +67,7 @@
             </div>
 
             <div class="field">
-                <label>Водовідведення</label>
+                <label>Водовідведення *</label>
                 <div class="radio-group">
                     <label><input type="radio" name="sewer" value="Так" checked onclick="document.getElementById('s_c').style.display='none'"><span>Так</span></label>
                     <label><input type="radio" name="sewer" value="Ні" onclick="document.getElementById('s_c').style.display='none'"><span>Ні</span></label>
@@ -115,15 +99,15 @@
             <p class="subtitle">Ваш номер телефону</p>
         </div>
         <div class="field"><input type="tel" id="userPhone" placeholder="+380" required></div>
-        <button class="btn" id="finalSubmitBtn" onclick="submitAllData()">Надіслати пропозицію</button>
+        <button class="btn" id="finalSubmitBtn" onclick="submitAllData()">Надіслати</button>
         <div id="status" style="text-align:center; margin-top:15px; font-weight:700;"></div>
     </div>
 
     <div id="step4" class="step">
         <div class="header" style="padding: 40px 0;">
             <div style="font-size: 50px; margin-bottom: 15px;">✅</div>
-            <h2>Дякуємо за пропозицію!</h2>
-            <p style="color: #64748b; font-weight: 600;">Ми зв'яжемося з Вами найближчим часом.</p>
+            <h2>Дякуємо!</h2>
+            <p style="color: #64748b; font-weight: 600;">Ми зв'яжемося з Вами.</p>
         </div>
     </div>
 </div>
@@ -145,7 +129,7 @@
 
     async function submitAllData() {
         const phone = document.getElementById('userPhone').value;
-        if (!phone) return alert("Вкажіть номер телефону");
+        if (!phone) return alert("Вкажіть телефон");
 
         const btn = document.getElementById('finalSubmitBtn');
         const status = document.getElementById('status');
@@ -185,7 +169,7 @@
         .then(() => nextStep(4))
         .catch(() => {
             status.style.color = "red";
-            status.innerText = "❌ Помилка. Спробуйте ще раз.";
+            status.innerText = "❌ Помилка.";
             btn.disabled = false;
         });
     }
