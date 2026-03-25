@@ -3,95 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ГРОШ — Анкета приміщення</title>
+    <title>Мережа ГРОШ — Анкета приміщення</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary: #E30613;
-            --primary-hover: #b0050e;
-            --bg: #f8fafc;
-            --text: #1e293b;
-            --border: #cbd5e1;
-        }
-
+        :root { --primary: #E30613; --bg: #f8fafc; --text: #1e293b; --border: #cbd5e1; }
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        
-        body { 
-            font-family: 'Outfit', sans-serif; 
-            background: var(--bg); 
-            min-height: 100vh; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            padding: 40px 20px; 
-        }
-        
-        .container { 
-            background: #fff; 
-            max-width: 650px; 
-            width: 100%; 
-            border-radius: 24px; 
-            box-shadow: 0 25px 50px rgba(0,0,0,0.08); 
-            overflow: hidden; 
-            border-top: 8px solid var(--primary);
-        }
-        
-        .header { 
-            padding: 40px 30px; 
-            text-align: center; 
-            border-bottom: 1px solid #f1f5f9;
-        }
-        
-        .logo-img { max-width: 240px; height: auto; display: block; margin: 0 auto; }
-        .header p { color: #64748b; font-size: 13px; margin-top: 15px; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; }
-        
+        body { font-family: 'Outfit', sans-serif; background: var(--bg); padding: 40px 20px; display: flex; justify-content: center; }
+        .container { background: #fff; max-width: 650px; width: 100%; border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); border-top: 8px solid var(--primary); overflow: hidden; }
+        .header { padding: 40px 30px; text-align: center; border-bottom: 1px solid #f1f5f9; }
+        .logo-img { max-width: 240px; height: auto; }
+        .header p { color: #64748b; font-size: 13px; margin-top: 15px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
         form { padding: 30px 40px; }
-        
-        .section-title { 
-            font-size: 13px; font-weight: 800; color: var(--primary); 
-            text-transform: uppercase; margin: 25px 0 15px; 
-            border-bottom: 2px solid #f1f5f9; padding-bottom: 5px; 
-        }
-        
+        .section-title { font-size: 13px; font-weight: 800; color: var(--primary); text-transform: uppercase; margin: 25px 0 10px; border-bottom: 2px solid #f1f5f9; padding-bottom: 5px; }
         .field { margin-bottom: 20px; }
-        label { display: block; font-weight: 700; font-size: 14px; margin-bottom: 8px; color: #334155; }
-        
-        input, select, textarea { 
-            width: 100%; padding: 14px; 
-            border: 2px solid var(--border); border-radius: 12px; 
-            font-size: 15px; transition: 0.3s; background: #fff;
-            font-family: inherit; font-weight: 600; color: var(--text);
-        }
-        
-        input:focus, textarea:focus, select:focus { border-color: var(--primary); outline: none; }
-
+        label { display: block; font-weight: 700; font-size: 14px; margin-bottom: 8px; }
+        input, select, textarea { width: 100%; padding: 12px; border: 2px solid var(--border); border-radius: 12px; font-size: 15px; font-family: inherit; }
+        input:focus { border-color: var(--primary); outline: none; }
         .row { display: flex; gap: 15px; }
-        .row > div { flex: 1; }
-
-        .radio-group { display: flex; gap: 20px; align-items: center; margin-bottom: 10px; flex-wrap: wrap; }
-        .radio-item { display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 14px; font-weight: 600; }
-        input[type="radio"] { accent-color: var(--primary); width: 18px; height: 18px; }
-
-        .file-box { 
-            border: 2px dashed var(--primary); 
-            padding: 30px; text-align: center; 
-            border-radius: 16px; 
-            background: rgba(227, 6, 19, 0.02); 
-            cursor: pointer; transition: 0.3s;
-        }
+        .radio-group { display: flex; gap: 15px; align-items: center; flex-wrap: wrap; }
+        .file-box { border: 2px dashed var(--primary); padding: 35px; text-align: center; border-radius: 15px; background: rgba(227, 6, 19, 0.02); cursor: pointer; transition: 0.3s; }
         .file-box:hover { background: rgba(227, 6, 19, 0.06); }
-
-        .btn { 
-            width: 100%; background: var(--primary); 
-            color: white; border: none; padding: 20px; 
-            border-radius: 12px; font-weight: 800; font-size: 17px; 
-            cursor: pointer; margin-top: 25px; transition: 0.3s;
-        }
-        .btn:hover { background: var(--primary-hover); transform: translateY(-2px); }
-        .btn:disabled { opacity: 0.6; cursor: not-allowed; }
-        
-        #status { text-align: center; margin-top: 20px; font-weight: 700; font-size: 14px; }
-        
+        .btn { width: 100%; background: var(--primary); color: white; border: none; padding: 20px; border-radius: 12px; font-weight: 800; font-size: 17px; cursor: pointer; margin-top: 20px; text-transform: uppercase; letter-spacing: 1px; }
+        #status { text-align: center; margin-top: 15px; font-weight: 700; }
         @media (max-width: 600px) { .row { flex-direction: column; gap: 0; } }
     </style>
 </head>
@@ -99,86 +32,63 @@
 
 <div class="container">
     <div class="header">
-        <img src="logo.png" alt="ГРОШ Лого" class="logo-img">
+        <img src="logo.png" alt="ГРОШ" class="logo-img">
         <p>Департамент розвитку мережі</p>
     </div>
 
     <form id="argonForm">
-        <div class="section-title">📍 Локація та ціна</div>
+        <div class="section-title">📍 Локація</div>
         <div class="field">
             <label>Адреса приміщення *</label>
             <input type="text" name="address" required placeholder="Вулиця, номер, місто">
         </div>
-
         <div class="row">
-            <div class="field">
-                <label>Площа (м²) *</label>
-                <input type="number" name="area" required>
-            </div>
-            <div class="field">
-                <label>Оренда (грн/міс) *</label>
-                <input type="number" name="price" required>
-            </div>
+            <div class="field"><label>Площа (м²) *</label><input type="number" name="area" required></div>
+            <div class="field"><label>Оренда (грн/міс) *</label><input type="number" name="price" required></div>
         </div>
 
         <div class="section-title">💧 Комунікації</div>
         <div class="field">
             <label>Водопостачання</label>
             <div class="radio-group">
-                <label class="radio-item"><input type="radio" name="water" value="Так" checked onclick="document.getElementById('w_ex').style.display='none'"> Так</label>
-                <label class="radio-item"><input type="radio" name="water" value="Ні" onclick="document.getElementById('w_ex').style.display='none'"> Ні</label>
-                <label class="radio-item"><input type="radio" name="water" value="Свій варіант" onclick="document.getElementById('w_ex').style.display='block'"> Інше</label>
+                <label><input type="radio" name="water" value="Так" checked onclick="document.getElementById('w_c').style.display='none'"> Так</label>
+                <label><input type="radio" name="water" value="Ні" onclick="document.getElementById('w_c').style.display='none'"> Ні</label>
+                <label><input type="radio" name="water" value="Інше" onclick="document.getElementById('w_c').style.display='block'"> Свій варіант</label>
             </div>
-            <input type="text" id="w_ex" name="water_custom" style="display:none; margin-top:10px" placeholder="Опишіть варіант...">
+            <input type="text" id="w_c" name="water_custom" style="display:none; margin-top:10px" placeholder="Опишіть варіант...">
         </div>
 
         <div class="field">
             <label>Водовідведення</label>
             <div class="radio-group">
-                <label class="radio-item"><input type="radio" name="sewer" value="Так" checked onclick="document.getElementById('s_ex').style.display='none'"> Так</label>
-                <label class="radio-item"><input type="radio" name="sewer" value="Ні" onclick="document.getElementById('s_ex').style.display='none'"> Ні</label>
-                <label class="radio-item"><input type="radio" name="sewer" value="Свій варіант" onclick="document.getElementById('s_ex').style.display='block'"> Інше</label>
+                <label><input type="radio" name="sewer" value="Так" checked onclick="document.getElementById('s_c').style.display='none'"> Так</label>
+                <label><input type="radio" name="sewer" value="Ні" onclick="document.getElementById('s_c').style.display='none'"> Ні</label>
+                <label><input type="radio" name="sewer" value="Інше" onclick="document.getElementById('s_c').style.display='block'"> Свій варіант</label>
             </div>
-            <input type="text" id="s_ex" name="sewer_custom" style="display:none; margin-top:10px" placeholder="Опишіть варіант...">
+            <input type="text" id="s_c" name="sewer_custom" style="display:none; margin-top:10px" placeholder="Опишіть варіант...">
         </div>
 
         <div class="section-title">⚡ Технічні дані</div>
         <div class="row">
-            <div class="field">
-                <label>Електропотужність (кВт)</label>
-                <input type="text" name="power">
-            </div>
-            <div class="field">
-                <label>Поверх</label>
-                <select name="floor">
-                    <option value="Перший поверх">Перший поверх</option>
-                    <option value="Цоколь">Цоколь</option>
-                </select>
-            </div>
+            <div class="field"><label>Потужність (кВт)</label><input type="text" name="power"></div>
+            <div class="field"><label>Поверх</label><select name="floor"><option>Перший поверх</option><option>Цоколь</option></select></div>
         </div>
-
-        <div class="field">
-            <label>Парковка (кількість місць)</label>
-            <input type="number" name="parking" value="0">
-        </div>
-
-        <div class="field">
-            <label>Опис потреби в ремонті</label>
-            <textarea name="repair" rows="3"></textarea>
-        </div>
+        <div class="field"><label>Парковка (місць)</label><input type="number" name="parking" value="0"></div>
+        <div class="field"><label>Ремонт</label><textarea name="repair" rows="3" placeholder="Опишіть потребу в ремонті..."></textarea></div>
 
         <div class="section-title">📸 Фото та техпаспорт</div>
         <div class="file-box" onclick="document.getElementById('fileInput').click()">
-            <strong id="fileLabel" style="color: var(--primary);">📎 Додати фото / техпаспорти</strong>
+            <strong id="fileLabel">📎 Додати фото / техпаспорти</strong>
             <input type="file" id="fileInput" multiple style="display:none" onchange="updateLabel()">
         </div>
 
-        <button type="submit" id="submitBtn" class="btn">Надіслати пропозицію</button>
+        <button type="submit" id="submitBtn" class="btn">НАДІСЛАТИ ПРОПОЗИЦІЮ</button>
         <div id="status"></div>
     </form>
 </div>
 
 <script>
+    // НОВИЙ ВАШ URL
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzDRgsPCTgv-5Hnz4KUiu6ejjjDzZlXSPtfFD0FhU2RkSfvca1jyNDTlVgh1WYUWCSH1w/exec";
 
     function updateLabel() {
@@ -193,59 +103,18 @@
         const files = document.getElementById('fileInput').files;
         
         btn.disabled = true;
-        btn.innerText = "ОБРОБКА ФАЙЛІВ...";
+        btn.innerText = "ОБРОБКА...";
         status.style.color = "#E30613";
-        status.innerText = "⏳ Зачекайте, дані завантажуються...";
+        status.innerText = "⏳ Файли завантажуються. Будь ласка, не закривайте сторінку...";
 
         const rawData = new FormData(this);
         const payload = {
             address: rawData.get('address'),
             area: rawData.get('area'),
             price: rawData.get('price'),
-            water: rawData.get('water') === 'Свій варіант' ? rawData.get('water_custom') : rawData.get('water'),
-            sewer: rawData.get('sewer') === 'Свій варіант' ? rawData.get('sewer_custom') : rawData.get('sewer'),
+            water: rawData.get('water') === 'Інше' ? rawData.get('water_custom') : rawData.get('water'),
+            sewer: rawData.get('sewer') === 'Інше' ? rawData.get('sewer_custom') : rawData.get('sewer'),
             power: rawData.get('power'),
             floor: rawData.get('floor'),
             parking: rawData.get('parking'),
-            repair: rawData.get('repair'),
-            files: []
-        };
-
-        for (let i = 0; i < files.length; i++) {
-            const file = files[i];
-            const base64 = await new Promise((resolve) => {
-                const reader = new FileReader();
-                reader.onload = (f) => resolve(f.target.result.split(',')[1]);
-                reader.readAsDataURL(file);
-            });
-            payload.files.push({
-                base64: base64,
-                name: file.name,
-                type: file.type
-            });
-        }
-
-        fetch(SCRIPT_URL, {
-            method: 'POST',
-            mode: 'no-cors',
-            body: JSON.stringify(payload)
-        })
-        .then(() => {
-            status.style.color = "#10b981";
-            status.innerHTML = "✅ Успішно надіслано!";
-            this.reset();
-            updateLabel();
-        })
-        .catch(() => {
-            status.style.color = "#ef4444";
-            status.innerHTML = "❌ Помилка.";
-        })
-        .finally(() => {
-            btn.disabled = false;
-            btn.innerText = "Надіслати пропозицію";
-        });
-    });
-</script>
-
-</body>
-</html>
+            repair: raw
