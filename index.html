@@ -18,11 +18,20 @@
         .field { margin-bottom: 20px; }
         label { display: block; font-weight: 700; font-size: 14px; margin-bottom: 8px; }
         input, select, textarea { width: 100%; padding: 12px; border: 2px solid var(--border); border-radius: 12px; font-size: 15px; font-family: inherit; }
-        input:focus { border-color: var(--primary); outline: none; }
-        .row { display: flex; gap: 15px; }
-        .radio-group { display: flex; gap: 15px; align-items: center; flex-wrap: wrap; }
-        .file-box { border: 2px dashed var(--primary); padding: 35px; text-align: center; border-radius: 15px; background: rgba(227, 6, 19, 0.02); cursor: pointer; transition: 0.3s; }
-        .btn { width: 100%; background: var(--primary); color: white; border: none; padding: 20px; border-radius: 12px; font-weight: 800; font-size: 17px; cursor: pointer; margin-top: 20px; text-transform: uppercase; letter-spacing: 1px; }
+        
+        /* Кнопковий стиль для радіо */
+        .radio-group { display: flex; gap: 10px; flex-wrap: wrap; }
+        .radio-group label { 
+            flex: 1; min-width: 100px; padding: 10px; border: 2px solid var(--border); 
+            border-radius: 10px; text-align: center; cursor: pointer; transition: 0.2s; 
+            font-size: 14px; background: #fff; margin-bottom: 0;
+        }
+        .radio-group input { display: none; }
+        .radio-group input:checked + span { color: var(--primary); font-weight: 800; }
+        .radio-group label:has(input:checked) { border-color: var(--primary); background: rgba(227, 6, 19, 0.05); }
+
+        .file-box { border: 2px dashed var(--primary); padding: 35px; text-align: center; border-radius: 15px; background: rgba(227, 6, 19, 0.02); cursor: pointer; }
+        .btn { width: 100%; background: var(--primary); color: white; border: none; padding: 18px; border-radius: 12px; font-weight: 800; font-size: 16px; cursor: pointer; margin-top: 20px; }
         #status { text-align: center; margin-top: 15px; font-weight: 700; }
         @media (max-width: 600px) { .row { flex-direction: column; gap: 0; } }
     </style>
@@ -36,32 +45,32 @@
     </div>
 
     <form id="argonForm">
-        <div class="section-title">📍 Локація та ціна</div>
+        <div class="section-title">📍 Локація</div>
         <div class="field"><label>Адреса приміщення *</label><input type="text" name="address" required></div>
         <div class="row">
             <div class="field"><label>Площа (м²) *</label><input type="number" name="area" required></div>
-            <div class="field"><label>Оренда (грн/міс) *</label><input type="number" name="price" required></div>
+            <div class="field"><label>Оренда (грн) *</label><input type="number" name="price" required></div>
         </div>
 
         <div class="section-title">💧 Комунікації</div>
         <div class="field">
             <label>Водопостачання</label>
             <div class="radio-group">
-                <label><input type="radio" name="water" value="Так" checked onclick="document.getElementById('w_c').style.display='none'"> Так</label>
-                <label><input type="radio" name="water" value="Ні" onclick="document.getElementById('w_c').style.display='none'"> Ні</label>
-                <label><input type="radio" name="water" value="Інше" onclick="document.getElementById('w_c').style.display='block'"> Свій варіант</label>
+                <label><input type="radio" name="water" value="Так" checked onclick="document.getElementById('w_c').style.display='none'"><span>Так</span></label>
+                <label><input type="radio" name="water" value="Ні" onclick="document.getElementById('w_c').style.display='none'"><span>Ні</span></label>
+                <label><input type="radio" name="water" value="Інше" onclick="document.getElementById('w_c').style.display='block'"><span>Свій варіант</span></label>
             </div>
-            <input type="text" id="w_c" name="water_custom" style="display:none; margin-top:10px" placeholder="Деталі...">
+            <input type="text" id="w_c" name="water_custom" style="display:none; margin-top:10px" placeholder="Опишіть варіант...">
         </div>
 
         <div class="field">
             <label>Водовідведення</label>
             <div class="radio-group">
-                <label><input type="radio" name="sewer" value="Так" checked onclick="document.getElementById('s_c').style.display='none'"> Так</label>
-                <label><input type="radio" name="sewer" value="Ні" onclick="document.getElementById('s_c').style.display='none'"> Ні</label>
-                <label><input type="radio" name="sewer" value="Інше" onclick="document.getElementById('s_c').style.display='block'"> Свій варіант</label>
+                <label><input type="radio" name="sewer" value="Так" checked onclick="document.getElementById('s_c').style.display='none'"><span>Так</span></label>
+                <label><input type="radio" name="sewer" value="Ні" onclick="document.getElementById('s_c').style.display='none'"><span>Ні</span></label>
+                <label><input type="radio" name="sewer" value="Інше" onclick="document.getElementById('s_c').style.display='block'"><span>Свій варіант</span></label>
             </div>
-            <input type="text" id="s_c" name="sewer_custom" style="display:none; margin-top:10px" placeholder="Деталі...">
+            <input type="text" id="s_c" name="sewer_custom" style="display:none; margin-top:10px" placeholder="Опишіть варіант...">
         </div>
 
         <div class="section-title">⚡ Технічні дані</div>
@@ -70,7 +79,7 @@
             <div class="field"><label>Поверх</label><select name="floor"><option>Перший поверх</option><option>Цоколь</option></select></div>
         </div>
         <div class="field"><label>Парковка (місць)</label><input type="number" name="parking" value="0"></div>
-        <div class="field"><label>Опис потреби в ремонті</label><textarea name="repair" rows="3"></textarea></div>
+        <div class="field"><label>Ремонт</label><textarea name="repair" rows="2" placeholder="Потреба в ремонті..."></textarea></div>
 
         <div class="section-title">📸 Файли</div>
         <div class="file-box" onclick="document.getElementById('fileInput').click()">
@@ -100,7 +109,7 @@
         btn.disabled = true;
         btn.innerText = "ОБРОБКА...";
         status.style.color = "#E30613";
-        status.innerText = "⏳ Завантаження файлів...";
+        status.innerText = "⏳ Відправка даних та файлів...";
 
         const rawData = new FormData(this);
         const payload = {
@@ -132,6 +141,8 @@
             status.innerHTML = "✅ Успішно надіслано!";
             this.reset();
             updateLabel();
+            document.getElementById('w_c').style.display='none';
+            document.getElementById('s_c').style.display='none';
         })
         .finally(() => {
             btn.disabled = false;
