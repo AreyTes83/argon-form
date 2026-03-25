@@ -22,7 +22,6 @@
         .row { display: flex; gap: 15px; }
         .radio-group { display: flex; gap: 15px; align-items: center; flex-wrap: wrap; }
         .file-box { border: 2px dashed var(--primary); padding: 35px; text-align: center; border-radius: 15px; background: rgba(227, 6, 19, 0.02); cursor: pointer; transition: 0.3s; }
-        .file-box:hover { background: rgba(227, 6, 19, 0.06); }
         .btn { width: 100%; background: var(--primary); color: white; border: none; padding: 20px; border-radius: 12px; font-weight: 800; font-size: 17px; cursor: pointer; margin-top: 20px; text-transform: uppercase; letter-spacing: 1px; }
         #status { text-align: center; margin-top: 15px; font-weight: 700; }
         @media (max-width: 600px) { .row { flex-direction: column; gap: 0; } }
@@ -37,11 +36,8 @@
     </div>
 
     <form id="argonForm">
-        <div class="section-title">📍 Локація</div>
-        <div class="field">
-            <label>Адреса приміщення *</label>
-            <input type="text" name="address" required placeholder="Вулиця, номер, місто">
-        </div>
+        <div class="section-title">📍 Локація та ціна</div>
+        <div class="field"><label>Адреса приміщення *</label><input type="text" name="address" required></div>
         <div class="row">
             <div class="field"><label>Площа (м²) *</label><input type="number" name="area" required></div>
             <div class="field"><label>Оренда (грн/міс) *</label><input type="number" name="price" required></div>
@@ -55,7 +51,7 @@
                 <label><input type="radio" name="water" value="Ні" onclick="document.getElementById('w_c').style.display='none'"> Ні</label>
                 <label><input type="radio" name="water" value="Інше" onclick="document.getElementById('w_c').style.display='block'"> Свій варіант</label>
             </div>
-            <input type="text" id="w_c" name="water_custom" style="display:none; margin-top:10px" placeholder="Опишіть варіант...">
+            <input type="text" id="w_c" name="water_custom" style="display:none; margin-top:10px" placeholder="Деталі...">
         </div>
 
         <div class="field">
@@ -65,7 +61,7 @@
                 <label><input type="radio" name="sewer" value="Ні" onclick="document.getElementById('s_c').style.display='none'"> Ні</label>
                 <label><input type="radio" name="sewer" value="Інше" onclick="document.getElementById('s_c').style.display='block'"> Свій варіант</label>
             </div>
-            <input type="text" id="s_c" name="sewer_custom" style="display:none; margin-top:10px" placeholder="Опишіть варіант...">
+            <input type="text" id="s_c" name="sewer_custom" style="display:none; margin-top:10px" placeholder="Деталі...">
         </div>
 
         <div class="section-title">⚡ Технічні дані</div>
@@ -74,9 +70,9 @@
             <div class="field"><label>Поверх</label><select name="floor"><option>Перший поверх</option><option>Цоколь</option></select></div>
         </div>
         <div class="field"><label>Парковка (місць)</label><input type="number" name="parking" value="0"></div>
-        <div class="field"><label>Ремонт</label><textarea name="repair" rows="3" placeholder="Опишіть потребу в ремонті..."></textarea></div>
+        <div class="field"><label>Опис потреби в ремонті</label><textarea name="repair" rows="3"></textarea></div>
 
-        <div class="section-title">📸 Фото та техпаспорт</div>
+        <div class="section-title">📸 Файли</div>
         <div class="file-box" onclick="document.getElementById('fileInput').click()">
             <strong id="fileLabel">📎 Додати фото / техпаспорти</strong>
             <input type="file" id="fileInput" multiple style="display:none" onchange="updateLabel()">
@@ -88,12 +84,11 @@
 </div>
 
 <script>
-    // НОВИЙ ВАШ URL
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzDRgsPCTgv-5Hnz4KUiu6ejjjDzZlXSPtfFD0FhU2RkSfvca1jyNDTlVgh1WYUWCSH1w/exec";
 
     function updateLabel() {
         const input = document.getElementById('fileInput');
-        document.getElementById('fileLabel').innerText = input.files.length > 0 ? "✅ Вибрано файлів: " + input.files.length : "📎 Додати фото / техпаспорти";
+        document.getElementById('fileLabel').innerText = input.files.length > 0 ? "✅ Вибрано: " + input.files.length : "📎 Додати фото / техпаспорти";
     }
 
     document.getElementById('argonForm').addEventListener('submit', async function(e) {
@@ -105,7 +100,7 @@
         btn.disabled = true;
         btn.innerText = "ОБРОБКА...";
         status.style.color = "#E30613";
-        status.innerText = "⏳ Файли завантажуються. Будь ласка, не закривайте сторінку...";
+        status.innerText = "⏳ Завантаження файлів...";
 
         const rawData = new FormData(this);
         const payload = {
@@ -117,4 +112,32 @@
             power: rawData.get('power'),
             floor: rawData.get('floor'),
             parking: rawData.get('parking'),
-            repair: raw
+            repair: rawData.get('repair'),
+            files: []
+        };
+
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            const base64 = await new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.onload = (f) => resolve(f.target.result.split(',')[1]);
+                reader.readAsDataURL(file);
+            });
+            payload.files.push({ base64: base64, name: file.name, type: file.type });
+        }
+
+        fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) })
+        .then(() => {
+            status.style.color = "#10b981";
+            status.innerHTML = "✅ Успішно надіслано!";
+            this.reset();
+            updateLabel();
+        })
+        .finally(() => {
+            btn.disabled = false;
+            btn.innerText = "НАДІСЛАТИ ПРОПОЗИЦІЮ";
+        });
+    });
+</script>
+</body>
+</html>
