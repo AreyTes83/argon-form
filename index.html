@@ -1,67 +1,156 @@
-function doPost(e) {
-  try {
-    // === НАЛАШТУВАННЯ ===
-    // Вставте сюди ID вашої папки на Google Диску
-    var folderId = "ВАШ_ID_ПАПКИ_З_ГУГЛ_ДИСКА"; 
-    // Вставте сюди вашу пошту для отримання сповіщень
-    var myEmail = "merch@argon.vin.ua";
-    
-    var folder = DriveApp.getFolderById(folderId);
-    var ss = SpreadsheetApp.getActiveSpreadsheet();
-    var sheet = ss.getSheets()[0];
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мережа ГРОШ — Анкета приміщення</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary: #E30613; --secondary: #003366; --bg: #f8fafc; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Outfit', sans-serif; background: var(--bg); padding: 20px; color: #1e293b; }
+        .container { max-width: 650px; margin: 0 auto; background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 15px 35px rgba(0,0,0,0.1); border-top: 8px solid var(--primary); }
+        .header { padding: 40px 20px; text-align: center; background: white; border-bottom: 1px solid #edf2f7; }
+        .logo { max-width: 220px; height: auto; margin-bottom: 15px; }
+        .header p { font-size: 13px; font-weight: 700; color: var(--secondary); text-transform: uppercase; letter-spacing: 1.5px; }
+        form { padding: 30px 40px; }
+        .section-title { font-size: 12px; font-weight: 800; color: var(--primary); text-transform: uppercase; margin: 25px 0 15px; border-bottom: 2px solid #f1f5f9; padding-bottom: 5px; }
+        .field { margin-bottom: 22px; }
+        label { display: block; font-weight: 700; font-size: 14px; margin-bottom: 8px; color: #334155; }
+        input, select, textarea { width: 100%; padding: 12px 15px; border: 2px solid #cbd5e1; border-radius: 10px; font-size: 15px; font-family: inherit; transition: 0.3s; }
+        input:focus, textarea:focus, select:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 0 4px rgba(227, 6, 19, 0.05); }
+        .row { display: flex; gap: 15px; }
+        .row > div { flex: 1; }
+        .radio-group { display: flex; gap: 15px; align-items: center; margin-bottom: 10px; flex-wrap: wrap; }
+        .radio-item { display: flex; align-items: center; gap: 6px; cursor: pointer; font-size: 14px; font-weight: 600; }
+        input[type="radio"] { accent-color: var(--primary); width: 18px; height: 18px; }
+        .file-zone { border: 2px dashed var(--primary); padding: 35px; text-align: center; border-radius: 15px; background: rgba(227, 6, 19, 0.02); cursor: pointer; transition: 0.3s; }
+        .file-zone:hover { background: rgba(227, 6, 19, 0.06); }
+        .btn { width: 100%; background: var(--primary); color: white; border: none; padding: 20px; border-radius: 14px; font-weight: 800; font-size: 17px; cursor: pointer; margin-top: 30px; transition: 0.3s; text-transform: uppercase; letter-spacing: 1px; }
+        .btn:hover { background: #b0050e; transform: translateY(-2px); box-shadow: 0 10px 20px rgba(227, 6, 19, 0.2); }
+        #status { text-align: center; margin-top: 20px; font-weight: 700; }
+        @media (max-width: 550px) { .row { flex-direction: column; gap: 0; } }
+    </style>
+</head>
+<body>
 
-    // Отримуємо текстові дані
-    var p = e.parameter;
-    var address = p.address || "Не вказано";
-    var area = p.area || "0";
-    var price = p.price || "0";
-    var message = p.message || "-";
-    
-    var fileUrls = [];
+<div class="container">
+    <div class="header">
+        <img src="https://i.ibb.co/bRCpYfH/grosh-logo.png" alt="ГРОШ" class="logo">
+        <p>Департамент розвитку мережі</p>
+    </div>
 
-    // ОБРОБКА ФАЙЛІВ (до 10 файлів)
-    for (var i = 0; i < 10; i++) {
-      var dataKey = "fileData_" + i;
-      var nameKey = "fileName_" + i;
-      var typeKey = "fileType_" + i;
+    <form id="argonForm">
+        <div class="section-title">📍 Локація та ціна</div>
+        <div class="field">
+            <label>Адреса приміщення *</label>
+            <input type="text" name="address" required placeholder="Місто, вулиця, номер">
+        </div>
+        <div class="row">
+            <div class="field"><label>Площа (м²) *</label><input type="number" name="area" required></div>
+            <div class="field"><label>Вартість оренди (грн/міс) *</label><input type="number" name="price" required></div>
+        </div>
 
-      if (p[dataKey]) {
-        var data = Utilities.base64Decode(p[dataKey]);
-        var blob = Utilities.newBlob(data, p[typeKey], p[nameKey]);
-        var file = folder.createFile(blob);
-        fileUrls.push(file.getUrl());
-      }
+        <div class="section-title">💧 Комунікації</div>
+        <div class="field">
+            <label>Водопостачання</label>
+            <div class="radio-group">
+                <label class="radio-item"><input type="radio" name="water_base" value="Так" checked onclick="document.getElementById('w_c').style.display='none'"> Так</label>
+                <label class="radio-item"><input type="radio" name="water_base" value="Ні" onclick="document.getElementById('w_c').style.display='none'"> Ні</label>
+                <label class="radio-item"><input type="radio" name="water_base" value="custom" onclick="document.getElementById('w_c').style.display='block'"> Свій варіант</label>
+            </div>
+            <input type="text" id="w_c" name="water_custom" style="display:none; margin-top:10px" placeholder="Опишіть варіант...">
+        </div>
+
+        <div class="field">
+            <label>Водовідведення</label>
+            <div class="radio-group">
+                <label class="radio-item"><input type="radio" name="sewer_base" value="Так" checked onclick="document.getElementById('s_c').style.display='none'"> Так</label>
+                <label class="radio-item"><input type="radio" name="sewer_base" value="Ні" onclick="document.getElementById('s_c').style.display='none'"> Ні</label>
+                <label class="radio-item"><input type="radio" name="sewer_base" value="custom" onclick="document.getElementById('s_c').style.display='block'"> Свій варіант</label>
+            </div>
+            <input type="text" id="s_c" name="sewer_custom" style="display:none; margin-top:10px" placeholder="Опишіть варіант...">
+        </div>
+
+        <div class="section-title">⚡ Технічні дані</div>
+        <div class="row">
+            <div class="field"><label>Електропотужність (кВт)</label><input type="text" name="power" placeholder="50"></div>
+            <div class="field">
+                <label>Поверх</label>
+                <select name="floor"><option value="Перший поверх">Перший поверх</option><option value="Цоколь">Цоколь</option></select>
+            </div>
+        </div>
+        <div class="field"><label>Парковка (кількість місць)</label><input type="number" name="parking" value="0"></div>
+        <div class="field"><label>Опис потреби в ремонті</label><textarea name="repair" rows="3" placeholder="Стан приміщення, необхідні роботи..."></textarea></div>
+
+        <div class="section-title">📸 Фото та техпаспорт</div>
+        <div class="file-zone" onclick="document.getElementById('fileInput').click()">
+            <strong id="fileLabel" style="color: var(--primary);">📎 Додати фото (можна декілька)</strong>
+            <input type="file" id="fileInput" multiple style="display:none" onchange="updateLabel()">
+            <p style="font-size: 11px; color: #64748b; margin-top: 10px;">Файли будуть завантажені на Google Диск</p>
+        </div>
+
+        <button type="submit" id="submitBtn" class="btn">Надіслати пропозицію</button>
+        <div id="status"></div>
+    </form>
+</div>
+
+<script>
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwE5wIUB395tnZjbozQW-ZtXcfEzsWAXIVZFrL84wdKucxZZqpxkGr5BCcnrjx-NHurOw/exec";
+
+    function updateLabel() {
+        const input = document.getElementById('fileInput');
+        document.getElementById('fileLabel').innerText = input.files.length > 0 ? "✅ Вибрано файлів: " + input.files.length : "📎 Додати фото (можна декілька)";
     }
 
-    // Створюємо рядок з посиланнями на файли для таблиці
-    var allFileUrls = fileUrls.length > 0 ? fileUrls.join("\n") : "Файлів немає";
+    document.getElementById('argonForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const btn = document.getElementById('submitBtn');
+        const status = document.getElementById('status');
+        const files = document.getElementById('fileInput').files;
+        
+        btn.disabled = true; btn.innerText = "ОБРОБКА...";
+        status.style.color = "var(--primary)"; status.innerText = "⏳ Зачекайте, дані завантажуються...";
 
-    // Записуємо в таблицю: Дата, Адреса, Площа, Ціна, Коментар, Посилання
-    sheet.appendRow([new Date(), address, area, price, message, allFileUrls]);
+        const formData = new URLSearchParams();
+        const data = new FormData(this);
+        
+        // Логіка об'єднання радіо та кастомних полів
+        let waterVal = data.get('water_base') === 'custom' ? data.get('water_custom') : data.get('water_base');
+        let sewerVal = data.get('sewer_base') === 'custom' ? data.get('sewer_custom') : data.get('sewer_base');
+        
+        formData.append('address', data.get('address'));
+        formData.append('area', data.get('area'));
+        formData.append('price', data.get('price'));
+        formData.append('water', waterVal);
+        formData.append('sewer', sewerVal);
+        formData.append('power', data.get('power'));
+        formData.append('floor', data.get('floor'));
+        formData.append('parking', data.get('parking'));
+        formData.append('repair', data.get('repair'));
 
-    // НАЛАШТУВАННЯ ТА НАДСИЛАННЯ ЛИСТА
-    if (fileUrls.length > 0) {
-       // Готуємо список посилань для HTML-листа
-       var linksListHtml = fileUrls.map(function(url, index) {
-         return "<li><a href='" + url + "'>Файл " + (index + 1) + "</a></li>";
-       }).join("");
+        let processed = 0;
+        const send = () => {
+            fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: formData.toString(), headers: {'Content-Type': 'application/x-www-form-urlencoded'} })
+            .then(() => {
+                status.style.color = "#10b981"; status.innerText = "✅ Успішно надіслано!";
+                this.reset(); updateLabel();
+            }).finally(() => { btn.disabled = false; btn.innerText = "Надіслати пропозицію"; });
+        }
 
-       MailApp.sendEmail({
-        to: myEmail,
-        subject: "НОВА ПРОПОЗИЦІЯ ГРОШ: " + address,
-        htmlBody: "<h3>Отримано нову анкету:</h3>" +
-                  "<b>Адреса:</b> " + address + "<br>" +
-                  "<b>Площа:</b> " + area + " м²<br>" +
-                  "<b>Ціна:</b> " + price + " грн/міс<br>" +
-                  "<b>Коментар:</b> " + message + "<br><br>" +
-                  "<b>Завантажені файли (" + fileUrls.length + "):</b>" +
-                  "<ul>" + linksListHtml + "</ul>"
-      });
-    }
-
-    return ContentService.createTextOutput("Success").setMimeType(ContentService.MimeType.TEXT);
-
-  } catch (err) {
-    return ContentService.createTextOutput("Error: " + err.toString()).setMimeType(ContentService.MimeType.TEXT);
-  }
-}
+        if (files.length > 0) {
+            for (let i = 0; i < files.length; i++) {
+                const reader = new FileReader();
+                reader.onload = (f) => {
+                    formData.append('fileData_' + i, f.target.result.split(',')[1]);
+                    formData.append('fileName_' + i, files[i].name);
+                    formData.append('fileType_' + i, files[i].type);
+                    if (++processed === files.length) send();
+                };
+                reader.readAsDataURL(files[i]);
+            }
+        } else { send(); }
+    });
+</script>
+</body>
+</html>
