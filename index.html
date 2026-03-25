@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Argon — Оренда нерухомості</title>
+    <title>Argon — Пропозиція нерухомості</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #E30613; /* Червоний колір ГРОШ */
+            --primary: #E30613; /* Корпоративний червоний */
+            --primary-hover: #b0050e;
             --bg-gradient: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
             --text: #1a1a1a;
             --border: #d1d5db;
@@ -37,25 +38,26 @@
         }
         
         .header { 
-            background: #fff; /* Біле тло для лого */
-            padding: 30px; 
+            background: #fff; 
+            padding: 40px 30px; 
             text-align: center; 
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid #f1f5f9;
         }
         
-        .logo-img { max-width: 180px; height: auto; }
-        .header p { color: #666; font-size: 13px; margin-top: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 1px; }
+        .logo-img { max-width: 200px; height: auto; }
+        .header p { color: #64748b; font-size: 13px; margin-top: 15px; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; }
         
         form { padding: 30px 40px; }
         
         .section-title { 
             font-size: 13px; 
-            font-weight: 700; 
+            font-weight: 800; 
             color: var(--primary); 
             text-transform: uppercase; 
             margin: 25px 0 15px; 
             border-bottom: 2px solid #f1f5f9; 
             padding-bottom: 5px; 
+            letter-spacing: 0.5px;
         }
         
         .field { position: relative; margin-bottom: 25px; }
@@ -67,21 +69,23 @@
         }
         
         input, select, textarea { 
-            width: 100%; padding: 16px 14px 10px 14px; 
+            width: 100%; padding: 18px 14px 8px 14px; 
             border: 2px solid var(--border); border-radius: 12px; 
             font-size: 16px; transition: 0.3s; background: #fff;
-            font-family: inherit; font-weight: 600;
+            font-family: inherit; font-weight: 600; color: var(--text);
         }
         
         input:focus, textarea:focus { border-color: var(--primary); outline: none; }
+        
+        /* Логіка Floating Labels */
         input:focus + label, input:not(:placeholder-shown) + label,
-        textarea:focus + label, textarea:not(:placeholder-shown) + label {
-            transform: translateY(-24px) scale(0.85);
-            color: var(--primary); background: #fff; padding: 0 5px; left: 10px;
+        textarea:focus + label, textarea:not(:placeholder-shown) + label,
+        select:focus + label, select:valid + label {
+            transform: translateY(-26px) scale(0.85);
+            color: var(--primary); background: #fff; padding: 0 6px; left: 10px;
         }
 
-        select { appearance: none; padding-top: 14px; }
-        select + label { transform: translateY(-24px) scale(0.85); color: var(--primary); background: #fff; padding: 0 5px; left: 10px;}
+        select { appearance: none; padding-top: 18px; cursor: pointer; }
 
         .row { display: flex; gap: 15px; }
         .row > div { flex: 1; }
@@ -89,11 +93,11 @@
         .file-box { 
             border: 2px dashed var(--primary); 
             padding: 25px; text-align: center; 
-            border-radius: 15px; 
-            background: rgba(227, 6, 19, 0.03); 
+            border-radius: 16px; 
+            background: rgba(227, 6, 19, 0.02); 
             cursor: pointer; transition: 0.3s;
         }
-        .file-box:hover { background: rgba(227, 6, 19, 0.08); }
+        .file-box:hover { background: rgba(227, 6, 19, 0.06); }
 
         .btn { 
             width: 100%; 
@@ -102,10 +106,11 @@
             padding: 20px; border-radius: 12px; 
             font-weight: 800; font-size: 17px; 
             cursor: pointer; margin-top: 25px; 
-            box-shadow: 0 10px 20px rgba(227, 6, 19, 0.2); 
+            box-shadow: 0 10px 25px rgba(227, 6, 19, 0.25); 
             transition: 0.3s; letter-spacing: 1px;
+            text-transform: uppercase;
         }
-        .btn:hover { background: #b0050e; transform: translateY(-2px); }
+        .btn:hover { background: var(--primary-hover); transform: translateY(-2px); }
         .btn:disabled { opacity: 0.6; cursor: not-allowed; }
         
         #status { text-align: center; margin-top: 20px; font-weight: 700; font-size: 15px; min-height: 24px; }
@@ -121,122 +126,42 @@
 <div class="container">
     <div class="header">
         <img src="https://i.ibb.co/3W3N5T3/argon-logo.png" alt="Argon Logo" class="logo-img">
-        <p>Анкета оренди нерухомості</p>
+        <p>Департамент розвитку мережі</p>
     </div>
 
     <form id="argonForm">
         <div class="section-title">📍 Локація та ціна</div>
         <div class="field">
-            <input type="text" name="address" required placeholder=" ">
+            <input type="text" name="address" id="address" required placeholder=" ">
             <label>Адреса об'єкта *</label>
         </div>
 
         <div class="row">
             <div class="field">
-                <input type="number" name="area" required placeholder=" ">
+                <input type="number" name="area" id="area" required placeholder=" ">
                 <label>Площа (м²) *</label>
             </div>
             <div class="field">
-                <input type="number" name="price" required placeholder=" ">
+                <input type="number" name="price" id="price" required placeholder=" ">
                 <label>Оренда (грн/міс) *</label>
             </div>
         </div>
 
-        <div class="field">
-            <textarea name="message" rows="3" placeholder=" "></textarea>
-            <label>Коментар (світло, поверх, ремонт)</label>
+        <div class="section-title">⚡ Технічні дані</div>
+        <div class="row">
+            <div class="field">
+                <input type="text" name="power" id="power" placeholder=" ">
+                <label>Електроенергія (кВт)</label>
+            </div>
+            <div class="field">
+                <select name="floor" id="floor" required>
+                    <option value="" disabled selected hidden></option>
+                    <option value="1 поверх">1 поверх</option>
+                    <option value="Цоколь">Цоколь</option>
+                    <option value="Інший">Інший</option>
+                </select>
+                <label>Поверх *</label>
+            </div>
         </div>
 
-        <div class="section-title">📸 Документація</div>
-        <div class="file-box" onclick="document.getElementById('fileInput').click()">
-            <strong id="fileLabel" style="color: var(--primary);">📎 Прикріпити фото / техпаспорт</strong>
-            <input type="file" id="fileInput" multiple style="display:none" onchange="updateLabel()">
-            <p style="font-size: 11px; color: #666; margin-top: 5px;">Можна вибрати декілька файлів відразу</p>
-        </div>
-
-        <button type="submit" id="submitBtn" class="btn">НАДІСЛАТИ ПРОПОЗИЦІЮ</button>
-        <div id="status"></div>
-    </form>
-</div>
-
-<script>
-    const SCRIPT_URL = "ВАШ_URL_EXEC_З_ГУГЛ_СКРИПТА";
-
-    function updateLabel() {
-        const input = document.getElementById('fileInput');
-        const label = document.getElementById('fileLabel');
-        label.innerText = input.files.length > 0 ? "✅ Вибрано файлів: " + input.files.length : "📎 Прикріпити фото / техпаспорт";
-    }
-
-    document.getElementById('argonForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        const btn = document.getElementById('submitBtn');
-        const status = document.getElementById('status');
-        const files = document.getElementById('fileInput').files;
-        
-        btn.disabled = true;
-        btn.innerText = "ЗАВАНТАЖЕННЯ ФАЙЛІВ...";
-        status.style.color = "#E30613";
-        status.innerText = "⏳ Будь ласка, зачекайте...";
-
-        const formData = new URLSearchParams();
-        formData.append('address', this.address.value);
-        formData.append('area', this.area.value);
-        formData.append('price', this.price.value);
-        formData.append('message', this.message.value);
-
-        // ОБРОБКА ДЕКІЛЬКОХ ФАЙЛІВ
-        let filesProcessed = 0;
-        const totalFiles = files.length;
-
-        if (totalFiles === 0) {
-            sendToGoogle(formData);
-        } else {
-            for (let i = 0; i < totalFiles; i++) {
-                const reader = new FileReader();
-                reader.onload = (function(file, index) {
-                    return function(f) {
-                        const base64Data = f.target.result.split(',')[1];
-                        formData.append('fileData_' + index, base64Data);
-                        formData.append('fileName_' + index, file.name);
-                        formData.append('fileType_' + index, file.type);
-                        
-                        filesProcessed++;
-                        if (filesProcessed === totalFiles) {
-                            sendToGoogle(formData);
-                        }
-                    };
-                })(files[i], i);
-                reader.readAsDataURL(files[i]);
-            }
-        }
-
-        function sendToGoogle(data) {
-            btn.innerText = "ВІДПРАВКА ДАНИХ...";
-            fetch(SCRIPT_URL, {
-                method: 'POST',
-                mode: 'no-cors', 
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: data.toString()
-            })
-            .then(() => {
-                status.style.color = "#10b981";
-                status.innerHTML = "✅ Успішно! Дані збережено.";
-                document.getElementById('argonForm').reset();
-                document.getElementById('fileLabel').innerText = "📎 Прикріпити фото / техпаспорт";
-            })
-            .catch(err => {
-                status.style.color = "#ef4444";
-                status.innerHTML = "❌ Помилка. Спробуйте ще раз.";
-                console.error(err);
-            })
-            .finally(() => {
-                btn.disabled = false;
-                btn.innerText = "НАДІСЛАТИ ПРОПОЗИЦІЮ";
-            });
-        }
-    });
-</script>
-
-</body>
-</html>
+        <div class="field
