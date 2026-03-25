@@ -7,7 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #E30613; /* Корпоративний червоний колір ГРОШ */
+            --primary: #E30613; 
             --primary-hover: #b0050e;
             --bg: #f8fafc;
             --text: #1e293b;
@@ -44,7 +44,14 @@
             border-bottom: 1px solid #f1f5f9;
         }
         
-        .logo-img { max-width: 220px; height: auto; }
+        /* Стилізація логотипа */
+        .logo-img { 
+            max-width: 240px; 
+            height: auto; 
+            display: block;
+            margin: 0 auto;
+        }
+
         .header p { color: #64748b; font-size: 13px; margin-top: 15px; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; }
         
         form { padding: 30px 40px; }
@@ -60,10 +67,7 @@
         }
         
         .field { position: relative; margin-bottom: 25px; }
-        
-        label { 
-            display: block; font-weight: 700; font-size: 14px; margin-bottom: 8px; color: #334155;
-        }
+        label { display: block; font-weight: 700; font-size: 14px; margin-bottom: 8px; color: #334155; }
         
         input, select, textarea { 
             width: 100%; padding: 14px; 
@@ -77,7 +81,6 @@
         .row { display: flex; gap: 15px; }
         .row > div { flex: 1; }
 
-        /* Стиль для Радіо кнопок */
         .radio-group { display: flex; gap: 20px; align-items: center; margin-bottom: 10px; flex-wrap: wrap; }
         .radio-item { display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 14px; font-weight: 600; }
         input[type="radio"] { accent-color: var(--primary); width: 18px; height: 18px; }
@@ -117,7 +120,7 @@
 
 <div class="container">
     <div class="header">
-        <img src="https://i.ibb.co/bRCpYfH/grosh-logo.png" alt="ГРОШ Лого" class="logo-img">
+        <img src="logo.png" alt="ГРОШ Лого" class="logo-img">
         <p>Департамент розвитку мережі</p>
     </div>
 
@@ -164,7 +167,7 @@
         <div class="row">
             <div class="field">
                 <label>Електропотужність (кВт)</label>
-                <input type="text" name="power" placeholder="Наприклад: 50">
+                <input type="text" name="power" placeholder="50">
             </div>
             <div class="field">
                 <label>Поверх</label>
@@ -182,14 +185,13 @@
 
         <div class="field">
             <label>Опис потреби в ремонті</label>
-            <textarea name="repair" rows="3" placeholder="Опишіть стан приміщення та необхідні роботи..."></textarea>
+            <textarea name="repair" rows="3" placeholder="Стан приміщення..."></textarea>
         </div>
 
         <div class="section-title">📸 Фото та техпаспорт</div>
         <div class="file-box" onclick="document.getElementById('fileInput').click()">
             <strong id="fileLabel" style="color: var(--primary);">📎 Додати фото / техпаспорти</strong>
             <input type="file" id="fileInput" multiple style="display:none" onchange="updateLabel()">
-            <p style="font-size: 11px; color: #666; margin-top: 10px;">Можна вибрати декілька файлів відразу</p>
         </div>
 
         <button type="submit" id="submitBtn" class="btn">Надіслати пропозицію</button>
@@ -198,7 +200,6 @@
 </div>
 
 <script>
-    // ВСТАВТЕ ВАШ URL З GOOGLE APPS SCRIPT НИЖЧЕ (ВІН МАЄ ЗАКІНЧУВАТИСЯ НА /exec)
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwE5wIUB395tnZjbozQW-ZtXcfEzsWAXIVZFrL84wdKucxZZqpxkGr5BCcnrjx-NHurOw/exec";
 
     function updateLabel() {
@@ -216,11 +217,73 @@
         btn.disabled = true;
         btn.innerText = "ОБРОБКА ФАЙЛІВ...";
         status.style.color = "#E30613";
-        status.innerText = "⏳ Будь ласка, зачекайте, дані завантажуються...";
+        status.innerText = "⏳ Будь ласка, зачекайте...";
 
         const formData = new URLSearchParams();
         const rawData = new FormData(this);
         
-        // Збираємо текстові дані, об'єднуючи радіо та кастомні поля
         let waterVal = rawData.get('water') === 'Свій варіант' ? rawData.get('water_custom') : rawData.get('water');
-        let sewerVal
+        let sewerVal = rawData.get('sewer') === 'Свій варіант' ? rawData.get('sewer_custom') : rawData.get('sewer');
+        
+        formData.append('address', rawData.get('address'));
+        formData.append('area', rawData.get('area'));
+        formData.append('price', rawData.get('price'));
+        formData.append('water', waterVal);
+        formData.append('sewer', sewerVal);
+        formData.append('power', rawData.get('power'));
+        formData.append('floor', rawData.get('floor'));
+        formData.append('parking', rawData.get('parking'));
+        formData.append('repair', rawData.get('repair'));
+
+        let filesProcessed = 0;
+        const totalFiles = files.length;
+
+        const sendToGoogle = (data) => {
+            fetch(SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors', 
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: data.toString()
+            })
+            .then(() => {
+                status.style.color = "#10b981";
+                status.innerHTML = "✅ Успішно! Дані надіслано.";
+                document.getElementById('argonForm').reset();
+                document.getElementById('fileLabel').innerText = "📎 Додати фото / техпаспорти";
+            })
+            .catch(() => {
+                status.style.color = "#ef4444";
+                status.innerHTML = "❌ Помилка з'єднання.";
+            })
+            .finally(() => {
+                btn.disabled = false;
+                btn.innerText = "НАДІСЛАТИ ПРОПОЗИЦІЮ";
+            });
+        };
+
+        if (totalFiles === 0) {
+            sendToGoogle(formData);
+        } else {
+            for (let i = 0; i < totalFiles; i++) {
+                const reader = new FileReader();
+                reader.onload = (function(file, index) {
+                    return function(f) {
+                        const base64Data = f.target.result.split(',')[1];
+                        formData.append('fileData_' + index, base64Data);
+                        formData.append('fileName_' + index, file.name);
+                        formData.append('fileType_' + index, file.type);
+                        
+                        filesProcessed++;
+                        if (filesProcessed === totalFiles) {
+                            sendToGoogle(formData);
+                        }
+                    };
+                })(files[i], i);
+                reader.readAsDataURL(files[i]);
+            }
+        }
+    });
+</script>
+
+</body>
+</html>
